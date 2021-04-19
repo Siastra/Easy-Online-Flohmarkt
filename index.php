@@ -17,7 +17,8 @@
 <body>
 <header>
     <?php
-    include_once $_SERVER["DOCUMENT_ROOT"] . "/backend/utility/MsgFactory.php";
+    $app_dir = dirname(__FILE__);
+    include_once dirname(__FILE__) . "/backend/utility/MsgFactory.php";
 
     //Message-Banner
     if (isset($_GET["registration"]) && ($_GET["registration"] == "success")) {
@@ -35,6 +36,9 @@
         switch ($_GET["section"]) {
             case "register":
                 include "sites/registrationForm.php";
+                break;
+            case "post":
+                include "sites/post.php";
                 break;
             default:
                 include "sites/dashboard.php";
