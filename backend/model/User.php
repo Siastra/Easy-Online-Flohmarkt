@@ -8,7 +8,8 @@ class User
     private ?string $picture;
     private string $title, $fname, $lname, $address, $password, $email, $city;
 
-    public function __construct($id, $title, $fname, $lname, $address, $plz, $city, $email, $password, $picture, $admin = 0)
+    public function __construct($id, $title, $fname, $lname, $address, $plz, $city, $email, $password,
+                                $picture = "res/images/user.svg", $admin = 0)
     {
         $this->email = $email;
         $this->fname = $fname;
