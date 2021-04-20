@@ -8,7 +8,6 @@
 
     <link rel="stylesheet" href="res/css/bootstrap.min.css">
     <link href="res/css/lightbox.css" rel="stylesheet">
-    <!--<script src="res/js/bootstrap.bundle.min.js" ></script>-->
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <script src="res/js/lightbox-plus-jquery.js"></script>
 
@@ -22,7 +21,7 @@
     //Message-Banner
     if (isset($_GET["registration"]) && ($_GET["registration"] == "success")) {
         echo MsgFactory::getSuccess("<b>Registration was successful!</b> User account was created!");
-    }else {
+    }else if (isset($_GET["registration"]) && ($_GET["registration"] == "fail")){
         echo MsgFactory::getWarning("<b>Registration failed!</b> Looks like there already exists an user account 
                                             with this E-Mail!");
     }
