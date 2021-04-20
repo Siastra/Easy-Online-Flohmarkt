@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/model/User.php';
+include_once __DIR__ . '/../../backend/model/User.php';
 
 class DB
 {
@@ -16,7 +16,7 @@ class DB
     public function __construct()
     {
 
-        $this->config = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/config/config.json"),
+        $this->config = json_decode(file_get_contents(__DIR__ . "/../../config/config.json"),
             true);
         $username = $this->config["db"]["user"];
         $password = $this->config["db"]["password"];
@@ -52,6 +52,20 @@ class DB
             }
         }
     }
-
+    public function getPost($post_id){
+        $stmt = $this->conn->prepare("SELECT * FROM adv WHERE id = ?;");
+        $stmt_user = $this->conn->prepare("SELECT * FROM users WHERE id = ?;");
+        try {
+            $stmt->execute([(int)$post_id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (count($result) > 0 && array_key_exists('user_id', $result)) {
+                $stmt_user->execute([$result['user_id']]);
+                $user = $stmt_user->fetch(PDO::FETCH_ASSOC);
+            }
+            return ['post' => $result, 'author' => $user];
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
 
 }
