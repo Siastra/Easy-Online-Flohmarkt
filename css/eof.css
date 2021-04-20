@@ -1,0 +1,21 @@
+.dash-ad-title{
+    color: black;
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+.dash-ad-price{
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+.dash-ad-img {
+    width: 66%;
+}
+
+.dash-img-container{
+    display: block;
+    text-align: center;
+}
