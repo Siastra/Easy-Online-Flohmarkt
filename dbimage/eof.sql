@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2021 at 11:21 AM
+-- Generation Time: Apr 20, 2021 at 09:55 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -29,19 +29,17 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
+  `title` varchar(16) NOT NULL,
   `fname` varchar(64) NOT NULL,
-  `lname` int(64) NOT NULL,
+  `lname` varchar(64) NOT NULL,
   `address` varchar(128) NOT NULL,
   `plz` int(11) NOT NULL,
   `city` varchar(64) NOT NULL,
-  `email` int(128) NOT NULL,
+  `email` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL,
+  `picture` varchar(64) NOT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Indexes for dumped tables
---
 
 --
 -- Indexes for table `users`
@@ -57,7 +55,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
