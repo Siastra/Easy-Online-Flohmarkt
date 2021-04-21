@@ -1,6 +1,7 @@
 <?php
 
-include_once __DIR__ . '/../../backend/model/User.php';
+include_once __DIR__ . '/../model/User.php';
+include_once __DIR__ . '/../model/Advert.php';
 
 class DB
 {
@@ -65,6 +66,24 @@ class DB
             return ['post' => $result, 'author' => $user];
         } catch (PDOException $e) {
             return [];
+        }
+    }
+    public function createAdv( Advert $adv): bool
+    {
+        $stmt = $this->conn->prepare("INSERT INTO `adverts` (`id`, `title`, `price`, `user_id`, `createdAt`, 
+                     `text`) 
+                     VALUES (NULL, ?, ?,  ?, 1,?);");
+        try {
+            $stmt->execute([$adv->getTitle(), $adv->getPrice(),
+                $adv->getUserId(),$adv->getDescription()]);
+            return true;
+        } catch (PDOException $e) {
+            $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
+            if (strpos($e->getMessage(), $existingkey) !== FALSE) { // duplicate username
+                return false;
+            } else {
+                throw $e;
+            }
         }
     }
 
