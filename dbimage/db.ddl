@@ -43,4 +43,7 @@ ALTER TABLE `adverts`
 ALTER TABLE `adverts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `adverts` 
+  CHANGE `text` `text` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
 
