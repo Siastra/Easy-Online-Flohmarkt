@@ -42,7 +42,10 @@
                     $post_id = $_GET["post"];
                     include "sites/post.php";
                     break;
-                }  
+                }
+            case "upload":
+                include  "sites/createAdv.php";
+                break;
             default:
                 include "sites/dashboard.php";
                 break;
