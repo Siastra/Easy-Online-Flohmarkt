@@ -38,11 +38,8 @@
                 include "sites/registrationForm.php";
                 break;
             case "post":
-                if (isset($_GET["post"])) {
-                    $post_id = $_GET["post"];
-                    include "sites/post.php";
-                    break;
-                }  
+                include "sites/post.php";
+                break;
             default:
                 include "sites/dashboard.php";
                 break;
