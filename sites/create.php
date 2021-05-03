@@ -1,6 +1,6 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/utility/DB.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/utility/MsgFactory.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/DB.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/MsgFactory.php';
 $db = new DB();
 if (isset($_POST["upload"])) {
     //$ext = pathinfo($_FILES['picture']['name'], PATHINFO_EXTENSION);
@@ -11,7 +11,7 @@ if (isset($_POST["upload"])) {
 
 <script>
     $(document).ready(function () {
-        var x = document.getElementsByTagName("TITLE")[0];
+        let x = document.getElementsByTagName("TITLE")[0];
         x.innerHTML = "Upload Post";
     });
 
