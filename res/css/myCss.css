@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+#LoginBody {
+    height: 100%;
+    font-family: 'Numans', sans-serif;
+}
+.tags{
+    margin-left: 1%;
+    background-color: #d9d9d9;
+    word-wrap:break-word;
+
+}
+.container {
+    height: 100%;
+    align-content: center;
+}
+
+.card {
+    height: 370px;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 400px;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.card-header h3 {
+    color: white;
+}
+
+.social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
+}
+
+.input-group-prepend span {
+    width: 50px;
+    background-color: #FFC312;
+    color: black;
+    border: 0 !important;
+}
+
+input:focus {
+    outline: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;
+
+}
+
+.login_btn {
+    color: black;
+    background-color: #FFC312 !important;
+    width: 100px;
+}
+
+.forgot_btn {
+    color: black;
+    background-color: #FFC312 !important;
+    width: 200px;
+}
+
+.login_btn:hover {
+    color: black;
+    background-color: white;
+}
+
+#previewImg, #profilePic {
+    border-radius: 50%;
+}
+
+.navbar-icon{
+    width: 25px;
+    height: 25px;
+}
+
+.itemHeader{
+    padding-left: 15px;
+    justify-content: end;
+}
+
+.picBackground {
+    background-color: #d0c7ff;
+    text-align: center;
+}
+
+body {
+    padding-top: 60px;
+}
+.form-marginRight{
+    margin-right: 40px;
+    margin-left: 40px;
+}

@@ -1,7 +1,7 @@
 <?php
 
-include_once __DIR__ . '/../model/User.php';
-include_once __DIR__ . '/../model/Advert.php';
+include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/User.php';
+include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/Advert.php';
 
 class DB
 {
@@ -17,7 +17,7 @@ class DB
     public function __construct()
     {
 
-        $this->config = json_decode(file_get_contents(__DIR__ . "/../../config/config.json"),
+        $this->config = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/config/config.json"),
             true);
         $username = $this->config["db"]["user"];
         $password = $this->config["db"]["password"];
@@ -53,6 +53,49 @@ class DB
             }
         }
     }
+
+    //Get a specific user by email
+    public function getUser(string $email): ?User
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM `users` WHERE email = ?");
+        if ($stmt->execute([$email])) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (empty($row)) {
+                return null;
+            } else {
+                return new User($row["id"], $row["title"], $row["fname"], $row["lname"],
+                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"]);
+            }
+        }
+        return null;
+    }
+
+    //User-login is performed
+    public function loginUser(string $email, string $pw): int
+    {
+        $stmt = $this->conn->prepare("SELECT password FROM `users` WHERE email = ?");
+        $stmt->execute([$email]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (empty($row)) { //user does not exist
+            return -1;
+        } else {
+            $user = $this->getUser($email);
+            if ($user->isAdmin()) {
+                if ($pw == $row["password"]) { //login successful
+                    return true;
+                } else { // login fails
+                    return false;
+                }
+            } else {
+                if (password_verify($pw, $row["password"])) { //login successful
+                    return true;
+                } else { // login fails
+                    return false;
+                }
+            }
+        }
+    }
+
     public function getPost($post_id){
         $stmt = $this->conn->prepare("SELECT * FROM adv WHERE id = ?;");
         $stmt_user = $this->conn->prepare("SELECT * FROM users WHERE id = ?;");
