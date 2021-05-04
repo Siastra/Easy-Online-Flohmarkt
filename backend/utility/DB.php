@@ -97,7 +97,7 @@ class DB
 
     public function getPost($post_id){
         $stmt = $this->conn->prepare("SELECT * FROM adv WHERE id = ?;");
-        $stmt_user = $this->conn->prepare("SELECT * FROM users WHERE id = ?;");
+        $stmt_user = $this->conn->prepare("SELECT * FROM `users` WHERE id = ?;");
         try {
             $stmt->execute([(int)$post_id]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -111,4 +111,18 @@ class DB
         }
     }
 
+    public function getAllPosts(): array
+    {
+        $result = array();
+        $sql1 = $this->conn->prepare("SELECT * FROM `adverts`");
+        $sql1->execute();
+        $posts = $sql1->fetchAll(PDO::FETCH_ASSOC);
+        if(!empty($posts)){
+           foreach ($posts as $post){
+               //array_push($result, $post["text"]);
+                array_push($result, new Advert($post["id"], $post["user_id"], $post["title"], $post["price"], $post["text"]));
+            }
+        }
+        return $result;
+    }
 }
