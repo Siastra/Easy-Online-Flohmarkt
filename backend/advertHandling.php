@@ -8,7 +8,6 @@ $advertisment = new Advert(1,$User->getId(), $_REQUEST["title"], $_REQUEST["pric
 
 
     if ($db->createAdv($advertisment)) {
-        var_dump($_FILES);
         $pic=$_FILES["picture"];
         Upload::uploadPost($_FILES, $pic["name"]);
         header("Location: ../index.php?section=dashboard");
