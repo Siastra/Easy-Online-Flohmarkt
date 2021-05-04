@@ -102,5 +102,13 @@ class Advert
       $this->description = $description;
   }
 
+    /**
+     * @return string
+     */
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt->format("Y-m-d H:m:s");
+    }
+
     
 }

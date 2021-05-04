@@ -131,10 +131,10 @@ class DB
     {
         $stmt = $this->conn->prepare("INSERT INTO `adverts` (`id`, `title`, `price`, `user_id`, `createdAt`, 
                      `text`) 
-                     VALUES (NULL, ?, ?,  ?, 1,?);");
+                     VALUES (NULL, ?, ?, ?, ?, ?);");
         try {
             $stmt->execute([$adv->getTitle(), $adv->getPrice(),
-                $adv->getUser()->getId(),$adv->getDescription()]);
+                $adv->getUser()->getId(), $adv->getCreatedAt().str, $adv->getDescription()]);
             return true;
         } catch (PDOException $e) {
             $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
