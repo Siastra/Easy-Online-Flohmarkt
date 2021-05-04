@@ -97,7 +97,7 @@
                 <a href="#" class="button btn-primary p-2 my-2 col-12 text-center">Chat</a>
             </div>
             <div class="row"> 
-                <div><?= $post["author"]["title"] ?></div>
+                <div><?= $post["author"]["fname"] ?> <?= $post["author"]["lname"] ?></div>
             </div>
             </div>
         </div>
