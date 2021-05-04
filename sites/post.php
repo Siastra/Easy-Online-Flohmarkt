@@ -1,6 +1,6 @@
 <?php
-    include_once $app_dir . "/backend/utility/DB.php";
-    $post = (new DB())->getPost($post_id);
+    include_once $_SERVER["DOCUMENT_ROOT"] . "/backend/utility/DB.php";
+    //$post = (new DB())->getPost($post_id);
     //var_dump($post);
     $images = [
     //];
@@ -64,7 +64,7 @@
     }
 ?>
 <section class="container">
-    <h1><?= $post["post"]["title"]?></h1>
+    <h1>Artikel</h1>
     <hr>
     <div class="container">
         <div class="row">
@@ -97,14 +97,14 @@
                 <a href="#" class="button btn-primary p-2 my-2 col-12 text-center">Chat</a>
             </div>
             <div class="row"> 
-                <div><?= $post["author"]["fname"]?> <?= $post["author"]["lname"]?></div>
+                <div>Max Mustermann</div>
             </div>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-12 description">
-                <?= $post["post"]["text"]?>
+                Description
             </div>
         </div>
     </div>
