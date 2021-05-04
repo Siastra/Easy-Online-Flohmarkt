@@ -1,12 +1,8 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/DB.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/MsgFactory.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/utility/DB.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/utility/MsgFactory.php';
 $db = new DB();
-if (isset($_POST["upload"])) {
-    //$ext = pathinfo($_FILES['picture']['name'], PATHINFO_EXTENSION);
-    //Upload::uploadPost($_FILES, $newName);
-  
-}
+
 ?>
 
 <script>
@@ -56,5 +52,21 @@ if (isset($_POST["upload"])) {
             </div>
         </form>
     </section>
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
 
+            reader.onload = function (e) {
+                $('#previewPost').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+    }
+
+    $("#picture").change(function () {
+        readURL(this);
+    });
+</script>
    
