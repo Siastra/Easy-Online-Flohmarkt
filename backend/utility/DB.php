@@ -54,7 +54,7 @@ class DB
         }
     }
     public function getPost($post_id){
-        $stmt = $this->conn->prepare("SELECT * FROM adv WHERE id = ?;");
+        $stmt = $this->conn->prepare("SELECT * FROM adverts WHERE id = ?;");
         $stmt_user = $this->conn->prepare("SELECT * FROM users WHERE id = ?;");
         try {
             $stmt->execute([(int)$post_id]);

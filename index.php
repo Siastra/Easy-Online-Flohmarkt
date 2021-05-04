@@ -8,10 +8,9 @@
 
     <link rel="stylesheet" href="res/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/eof.css">
-    <link href="res/css/lightbox.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <script src="res/js/lightbox-plus-jquery.js"></script>
-
+    <link href="res/css/lightbox.css" rel="stylesheet">
     <title>EOF</title>
 </head>
 <body>
