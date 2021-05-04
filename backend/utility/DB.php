@@ -70,6 +70,22 @@ class DB
         return null;
     }
 
+    //Get a specific user by id
+    public function getUserById(int $id): ?User
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM `users` WHERE id = ?");
+        if ($stmt->execute([$id])) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (empty($row)) {
+                return null;
+            } else {
+                return new User($row["id"], $row["title"], $row["fname"], $row["lname"],
+                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"]);
+            }
+        }
+        return null;
+    }
+
     //User-login is performed
     public function loginUser(string $email, string $pw): int
     {
@@ -96,29 +112,29 @@ class DB
         }
     }
 
-    public function getPost($post_id){
+    public function getAdById(int $post_id): ?Advert {
         $stmt = $this->conn->prepare("SELECT * FROM adverts WHERE id = ?;");
-        $stmt_user = $this->conn->prepare("SELECT * FROM users WHERE id = ?;");
         try {
-            $stmt->execute([(int)$post_id]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (count($result) > 0 && array_key_exists('user_id', $result)) {
-                $stmt_user->execute([$result['user_id']]);
-                $user = $stmt_user->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute([$post_id]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (empty($row)) {
+                return null;
+            } else {
+                return new Advert($row["id"], $row["title"], $row["price"], $this->getUserById($row["user_id"]),
+                    new DateTime($row["createdAt"]), $row["text"]);
             }
-            return ['post' => $result, 'author' => $user];
         } catch (PDOException $e) {
-            return [];
+            return null;
         }
     }
-    public function createAdv( Advert $adv): bool
+    public function createAdv(Advert $adv): bool
     {
         $stmt = $this->conn->prepare("INSERT INTO `adverts` (`id`, `title`, `price`, `user_id`, `createdAt`, 
                      `text`) 
                      VALUES (NULL, ?, ?,  ?, 1,?);");
         try {
             $stmt->execute([$adv->getTitle(), $adv->getPrice(),
-                $adv->getUserId(),$adv->getDescription()]);
+                $adv->getUser()->getId(),$adv->getDescription()]);
             return true;
         } catch (PDOException $e) {
             $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
@@ -138,8 +154,8 @@ class DB
         $posts = $sql1->fetchAll(PDO::FETCH_ASSOC);
         if(!empty($posts)){
            foreach ($posts as $post){
-               //array_push($result, $post["text"]);
-                array_push($result, new Advert($post["id"], $post["user_id"], $post["title"], $post["price"], $post["text"]));
+                array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                    $this->getUserById(intval($post["user_id"])),  new DateTime($post["createdAt"]), $post["text"]));
             }
         }
         return $result;

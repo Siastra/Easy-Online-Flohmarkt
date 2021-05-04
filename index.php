@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link href="res/css/lightbox.css" rel="stylesheet">
     <link href="res/css/myCss.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <script src="res/js/lightbox-plus-jquery.js"></script>
     <link href="res/css/lightbox.css" rel="stylesheet">
     <title>EOF</title>
@@ -111,7 +110,6 @@
     }
     ?>
     <script src="res/js/bootstrap.bundle.min.js" ></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 </main>
 </body>
 </html>

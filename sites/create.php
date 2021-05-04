@@ -1,6 +1,6 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/utility/DB.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/utility/MsgFactory.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/DB.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/MsgFactory.php';
 $db = new DB();
 
 ?>

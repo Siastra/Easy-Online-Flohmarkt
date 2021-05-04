@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2021 at 09:55 AM
+-- Generation Time: May 04, 2021 at 02:31 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -28,24 +28,35 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL PRIMARY KEY,
   `title` varchar(16) NOT NULL,
   `fname` varchar(64) NOT NULL,
   `lname` varchar(64) NOT NULL,
   `address` varchar(128) NOT NULL,
   `plz` int(11) NOT NULL,
   `city` varchar(64) NOT NULL,
-  `email` varchar(128) NOT NULL,
+  `email` varchar(128) NOT NULL UNIQUE,
   `password` varchar(128) NOT NULL,
   `picture` varchar(64) NOT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `adverts` (
+    id          int(11) NOT NULL,
+    title       VARCHAR(64) NOT NULL,
+    price       int(64) NOT NULL,
+    user_id     int(11) NOT NULL,
+    createdAt   DATETIME NOT NULL,
+    text        VARCHAR(128) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
 --
 -- Indexes for table `users`
 --
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -55,9 +66,23 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+ALTER TABLE `adverts`
+  ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `adverts`
+  ADD CONSTRAINT post_user_fk FOREIGN KEY ( user_id )
+ REFERENCES `users` ( id );
+
+ALTER TABLE `adverts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `adverts` 
+  CHANGE `text` `text` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;

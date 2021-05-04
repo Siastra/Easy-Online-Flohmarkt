@@ -32,6 +32,9 @@ ALTER TABLE `users`
 ALTER TABLE `users`
     MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `users`
+  ADD CONSTRAINT users_email_unique UNIQUE ( email );
+
 ALTER TABLE `adverts`
   ADD PRIMARY KEY (`id`);
 

@@ -1,9 +1,9 @@
 <?php
     include_once $_SERVER["DOCUMENT_ROOT"] . "/backend/utility/DB.php";
-    $post = (new DB())->getPost($_GET['post']);
-    //var_dump($post);
+    $db = new DB();
+    $post = $db->getAdById(intval($_REQUEST["id"]));
+
     $images = [
-    //];
     "/res/images/car.jpg",  "/res/images/car.jpg", "/res/images/car2.jpeg", "/res/images/baguette.png"];
     function cropThumbnail ($image) {
         $filepath = pathinfo($image);
@@ -64,7 +64,7 @@
     }
 ?>
 <section class="container">
-    <h1><?= $post["post"]["title"] ?></h1>
+    <h1><?= $post->getTitle() ?></h1>
     <hr>
     <div class="container">
         <div class="row">
@@ -91,20 +91,20 @@
             </div>
             <div class="col-4 price ">
                 <div class="row">  
-                <div class="col-12 text-center"  style = "font-size: larger; font-weight: 600; background-color: yellow; padding: 15px; margin-top: 20px;"> $<?= $post["post"]["price"]?> </div>
+                <div class="col-12 text-center"  style = "font-size: larger; font-weight: 600; background-color: yellow; padding: 15px; margin-top: 20px;"> $<?= $post->getPrice()?> </div>
             </div>
             <div class="row"> 
                 <a href="#" class="button btn-primary p-2 my-2 col-12 text-center">Chat</a>
             </div>
             <div class="row"> 
-                <div><?= $post["author"]["fname"] ?> <?= $post["author"]["lname"] ?></div>
+                <div><?= $post->getUser()->getFname() ?> <?= $post->getUser()->getLname() ?></div>
             </div>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-12 description">
-            <?= $post["post"]["text"] ?>
+            <?= $post->getDescription() ?>
             </div>
         </div>
     </div>
