@@ -49,4 +49,10 @@ ALTER TABLE `adverts`
 ALTER TABLE `adverts` 
   CHANGE `text` `text` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 
-
+CREATE TABLE `favorite` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `user_id` int(11) NOT NULL,
+ `advert_id` int(11) NOT NULL,
+ `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
