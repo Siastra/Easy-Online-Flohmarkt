@@ -1,7 +1,7 @@
 <?php
 
-include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/User.php';
-include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/Advert.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/model/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/model/Advert.php';
 
 class DB
 {
@@ -73,7 +73,7 @@ class DB
             } else {
                 return true;
             }
-        }catch (PDOException $e) {
+        } catch (PDOException $e) {
             $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
             if (strpos($e->getMessage(), $existingkey) !== FALSE) { // duplicate username
                 return false;
@@ -82,6 +82,18 @@ class DB
             }
         }
 
+    }
+
+    //Updates profile picture in the DB.
+    public function updateProfilePic(int $id, string $path): bool
+    {
+        $stmt = $this->conn->prepare("UPDATE `users` SET picture=?
+                                                WHERE id=?");
+        if (!$stmt->execute([$path, $id])) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     //Get a specific user by email
@@ -94,7 +106,7 @@ class DB
                 return null;
             } else {
                 return new User($row["id"], $row["title"], $row["fname"], $row["lname"],
-                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"]);
+                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"], $row["picture"]);
             }
         }
         return null;
@@ -157,7 +169,8 @@ class DB
         }
     }
 
-    public function getAdById(int $post_id): ?Advert {
+    public function getAdById(int $post_id): ?Advert
+    {
         $stmt = $this->conn->prepare("SELECT * FROM adverts WHERE id = ?;");
         try {
             $stmt->execute([$post_id]);
@@ -172,6 +185,7 @@ class DB
             return null;
         }
     }
+
     public function createAdv(Advert $adv): bool
     {
         $stmt = $this->conn->prepare("INSERT INTO `adverts` (`id`, `title`, `price`, `user_id`, `createdAt`, 
@@ -179,7 +193,7 @@ class DB
                      VALUES (NULL, ?, ?, ?, ?, ?);");
         try {
             $stmt->execute([$adv->getTitle(), $adv->getPrice(),
-                $adv->getUser()->getId(), $adv->getCreatedAt().str, $adv->getDescription()]);
+                $adv->getUser()->getId(), $adv->getCreatedAt() . str, $adv->getDescription()]);
             return true;
         } catch (PDOException $e) {
             $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
@@ -197,10 +211,10 @@ class DB
         $sql1 = $this->conn->prepare("SELECT * FROM `adverts`");
         $sql1->execute();
         $posts = $sql1->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($posts)){
-           foreach ($posts as $post){
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
                 array_push($result, new Advert($post["id"], $post["title"], $post["price"],
-                    $this->getUserById(intval($post["user_id"])),  new DateTime($post["createdAt"]), $post["text"]));
+                    $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
             }
         }
         return $result;

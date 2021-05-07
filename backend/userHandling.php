@@ -1,14 +1,19 @@
 <?php
 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/DB.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/upload.php';
 
 $db = new DB();
 session_start();
-
 if ($_REQUEST["type"] == "insert") {
     $user = new User(1, $_REQUEST["title"], $_REQUEST["fname"], $_REQUEST["lname"],
-        $_REQUEST["address"], $_REQUEST["plz"], $_REQUEST["city"], $_REQUEST["email"], $_REQUEST["pw"]);
+        $_REQUEST["address"], $_REQUEST["plz"], $_REQUEST["city"], $_REQUEST["email"], $_REQUEST["pw"], );
     if ($db->registerUser($user)) {
+        $user = $db->getUser($_REQUEST["email"]);
+        $path = Upload::uploadProfilePicture($_FILES, $user->getId());
+        if (strlen($path) > 1) {
+            $db->updateProfilePic($user->getId(), $path);
+        }
         header("Location: ../index.php?registration=success");
     } else {
         header("Location: ../index.php?section=register&registration=fail");
@@ -46,8 +51,14 @@ if ($_REQUEST["type"] == "insert") {
         header("Location: ../index.php?section=register&edit=true&updatePassword=wrongPassword");
     }
 } else if ($_REQUEST["type"] == "update") {
-    $user = new User($db->getUser($_SESSION["email"])->getId(), $_REQUEST["title"], $_REQUEST["fname"],
+    $user = new User($_REQUEST["id"], $_REQUEST["title"], $_REQUEST["fname"],
         $_REQUEST["lname"], $_REQUEST["address"], $_REQUEST["plz"], $_REQUEST["city"], $_REQUEST["email"], '');
+    if (!empty($_FILES)) {
+        $path = Upload::uploadProfilePicture($_FILES, $_REQUEST["id"]);
+        if (strlen($path) > 1) {
+            $db->updateProfilePic($_REQUEST["id"], $path);
+        }
+    }
     if ($db->updateUser($user)) {
         header("Location: ../index.php?update=success");
     } else {
