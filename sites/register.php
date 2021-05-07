@@ -4,6 +4,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/MsgFactory.php';
 
 $db = new DB();
 $fill = false;
+$edit = isset($_GET["edit"]);
 $user = null;
 echo '<script>
     $(document).ready(function () {
@@ -28,13 +29,17 @@ if (isset($_POST["pw"]) && ($_POST["pw"] != $_POST["pwRepeat"])) {
     echo '<script type="text/javascript">document.getElementById("myForm").submit();</script>';
 }
 
+if ($edit) {
+    $user = $db->getUser($_SESSION["email"]);
+    $fill = true;
+}
 
 ?>
 <section class="container">
-    <h1>User-Registration</h1>
+    <h1><?php echo (($edit) ? 'Edit user' : 'User-Registration'); ?></h1>
     <hr>
     <form method="POST" action="index.php?section=register" enctype="multipart/form-data" class="was-validated">
-        <input type="hidden" name="type" value="insert">
+        <input type="hidden" name="type" value="<?php echo (($edit) ? 'update' : 'insert'); ?>">
         <input type="hidden" name="id" <?php echo 'value="' . (($fill) ? $user->getId() : '') . '"'; ?>>
         <label for="title">Title</label><br>
         <div class="form-check form-check-inline">
@@ -119,6 +124,8 @@ if (isset($_POST["pw"]) && ($_POST["pw"] != $_POST["pwRepeat"])) {
                 <div class="invalid-feedback">Please fill out this field correctly.</div>
             </div>
         </div>
+        <?php
+        $passwordInput = '
         <div class="row">
             <div class="form-group col">
                 <label for="pw">Password</label>
@@ -138,10 +145,28 @@ if (isset($_POST["pw"]) && ($_POST["pw"] != $_POST["pwRepeat"])) {
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field correctly.</div>
             </div>
-        </div>
+        </div>';
+        if (!$edit)
+         echo $passwordInput;
+        ?>
 
         <button type="submit" class="btn btn-success submit">Submit</button>
     </form>
+    <?php
+        if ($edit) {
+            echo '<h1>Change password</h1><hr>
+                    <form enctype="multipart/form-data" method="post" action="backend/userHandling.php">
+                      <input type="hidden" name="type" value="updatePw"><div class="row">
+                                <div class="form-group col">
+                                    <label for="oldPw">Old Password</label>
+                                    <input type="password" class="form-control" id="oldPw" placeholder="Old Password" name="oldPw"
+                                           pattern="([A-Z]|[a-z]|(ö|ß|ä|ü)|[1-9]){1,32}" required>
+                                </div>
+                                <div class="col"></div>
+                            </div>' .
+            $passwordInput . '<button type="submit" class="btn btn-success submit">Submit</button></form>';
+        }
+    ?>
 </section>
 
 <script>

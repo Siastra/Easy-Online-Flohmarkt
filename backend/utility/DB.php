@@ -54,6 +54,36 @@ class DB
         }
     }
 
+    //Updates user data in the DB.
+    public function updateUser(User $user): bool
+    {
+        $stmt = $this->conn->prepare("UPDATE `users` SET title=?, fname=?, lname=?, address=?, plz=?, city=?, email=? 
+                                                WHERE id=?");
+        $title = $user->getTitle();
+        $fname = $user->getFname();
+        $lname = $user->getLname();
+        $address = $user->getAddress();
+        $plz = $user->getPlz();
+        $city = $user->getCity();
+        $email = $user->getEmail();
+        $id = $user->getId();
+        try {
+            if (!$stmt->execute([$title, $fname, $lname, $address, $plz, $city, $email, $id])) {
+                return false;
+            } else {
+                return true;
+            }
+        }catch (PDOException $e) {
+            $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
+            if (strpos($e->getMessage(), $existingkey) !== FALSE) { // duplicate username
+                return false;
+            } else {
+                throw $e;
+            }
+        }
+
+    }
+
     //Get a specific user by email
     public function getUser(string $email): ?User
     {
@@ -69,6 +99,21 @@ class DB
         }
         return null;
     }
+
+    //Updates password in the DB.
+    public function updatePassword(User $user): bool
+    {
+        $stmt = $this->conn->prepare("UPDATE `users` SET password=? WHERE id=?");
+        $pw = $user->getPassword();
+        $hash = password_hash($pw, PASSWORD_DEFAULT);
+        $id = $user->getId();
+        if (!$stmt->execute([$hash, $id])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     //Get a specific user by id
     public function getUserById(int $id): ?User

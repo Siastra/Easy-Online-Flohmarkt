@@ -31,4 +31,26 @@ if ($_REQUEST["type"] == "insert") {
     $_SESSION = array();
     session_destroy();
     header("Location: ../index.php?logout=success");
+}else if ($_REQUEST["type"] == "updatePw") {
+    if ($db->loginUser($_SESSION["email"], $_REQUEST["oldPw"])) {
+        $newPw = $_REQUEST["pw"];
+        $user = $db->getUser($_SESSION["email"]);
+        $user->setPassword($newPw);
+        if ($db->updatePassword($user)) {
+            echo "Record updated successfully";
+            header("Location: ../index.php?updatePassword=success");
+        } else {
+            header("Location: ../index.php?updatePassword=fail");
+        }
+    } else {
+        header("Location: ../index.php?section=register&edit=true&updatePassword=wrongPassword");
+    }
+} else if ($_REQUEST["type"] == "update") {
+    $user = new User($db->getUser($_SESSION["email"])->getId(), $_REQUEST["title"], $_REQUEST["fname"],
+        $_REQUEST["lname"], $_REQUEST["address"], $_REQUEST["plz"], $_REQUEST["city"], $_REQUEST["email"], '');
+    if ($db->updateUser($user)) {
+        header("Location: ../index.php?update=success");
+    } else {
+        header("Location: ../index.php?section=register&edit=true&update=fail");
+    }
 }
