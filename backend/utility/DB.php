@@ -252,4 +252,11 @@ class DB
         }
         return $result;
     }
+    public function getLatestAdvId():int{
+        $sql1 = $this->conn->prepare("SELECT MAX(id) FROM `adverts`");
+        $sql1->execute();
+        $advId = $sql1->fetch(PDO::FETCH_ASSOC);
+        var_dump($advId);
+        return $advId["MAX(id)"];
+    }
 }

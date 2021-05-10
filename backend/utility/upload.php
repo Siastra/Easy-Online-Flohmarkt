@@ -4,17 +4,34 @@
 class Upload
 {
 
-    public static function uploadPost(array $files, string $fileNewName): bool
+    public static function uploadPost(array $files, string $fileNewName,int $id,int $i,int $advId): bool
     {
-        $file = $files['picture']['tmp_name'];
+        if(!is_dir('../pictures/Adds')){
+            mkdir('../pictures/Adds');
+        }
+        if(!is_dir('../pictures/Adds/'.$advId)){
+            mkdir('../pictures/Adds/'.$advId );
+        }
+        $tmpPath='../pictures/Adds/'.$advId;
+        if(!is_dir($tmpPath.'/full/')){
+            mkdir( $tmpPath.'/full/');
+        }
+        if(!is_dir($tmpPath.'/thumbnail/')){
+            mkdir( $tmpPath.'/thumbnail/');
+        }
+        if(!is_dir($tmpPath.'/half/')){
+            mkdir( $tmpPath.'/half/');
+        }
+        $file = $files['picture']['tmp_name'][$i];
+        var_dump($file);
         $sourceProperties = getimagesize($file);
-        $folderPathDash = '../pictures/dashboard/';
-        $folderPathThumb = '../pictures/thumbnail/';
-        $folderPathFull = '../pictures/full/';
+        $folderPathDash = $tmpPath.'/half/';
+        $folderPathThumb = $tmpPath.'/thumbnail/';
+        $folderPathFull = $tmpPath.'/full/';
         $fullPathDash = $_SESSION["path"] . "/" . $folderPathDash;
         $fullPathThumb = $_SESSION["path"] . "/" . $folderPathThumb;
         $fullPath = $_SESSION["path"] . "/" . $folderPathFull;
-        $ext = pathinfo($files['picture']['name'], PATHINFO_EXTENSION);
+        $ext = pathinfo($files['picture']['name'][$i], PATHINFO_EXTENSION);
         $imageType = $sourceProperties[2];
 
 
@@ -24,10 +41,10 @@ class Upload
             case IMAGETYPE_PNG:
                 $imageResourceId = imagecreatefrompng($file);
                 $targetLayer = self::imageResizeThump($imageResourceId, $sourceProperties[0], $sourceProperties[1]);
-                imagepng($targetLayer, $fullPathThumb . $fileNewName . "." . $ext);
+                imagepng($targetLayer, $fullPathThumb . $fileNewName );
                 $imageResourceId1 = imagecreatefrompng($file);
                 $targetLayer1 = self::imageResizeDash($imageResourceId1, $sourceProperties[0], $sourceProperties[1]);
-                imagepng($targetLayer1, $fullPathDash . $fileNewName . "." . $ext);
+                imagepng($targetLayer1, $fullPathDash . $fileNewName );
 
                 break;
 
@@ -35,10 +52,10 @@ class Upload
             case IMAGETYPE_JPEG:
                 $imageResourceId = imagecreatefromjpeg($file);
                 $targetLayer = self::imageResizeThump($imageResourceId, $sourceProperties[0], $sourceProperties[1]);
-                imagejpeg($targetLayer, $fullPathThumb . $fileNewName . "." . $ext);
+                imagejpeg($targetLayer, $fullPathThumb . $fileNewName );
                 $imageResourceId1 = imagecreatefromjpeg($file);
                 $targetLayer1 = self::imageResizeDash($imageResourceId1, $sourceProperties[0], $sourceProperties[1]);
-                imagejpeg($targetLayer1, $fullPathDash . $fileNewName . "." . $ext);
+                imagejpeg($targetLayer1, $fullPathDash . $fileNewName );
 
                 break;
 
@@ -49,7 +66,7 @@ class Upload
         }
 
 
-        move_uploaded_file($file, $fullPath . $fileNewName . "." . $ext);
+        move_uploaded_file($file, $fullPath . $fileNewName );
         return true;
     }
 
