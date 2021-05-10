@@ -70,16 +70,20 @@ class Upload
         return true;
     }
 
-    public static function uploadProfilePicture(array $files): bool
+    public static function uploadProfilePicture(array $files, int $uid): string
     {
         $file = $files['picture']['tmp_name'];
         $sourceProperties = getimagesize($file);
-        $folderPathThumb = 'pictures/thumbnail/';
-        $folderPathFull = 'pictures/full/';
-        $fullPathThumb = $_SERVER['DOCUMENT_ROOT'] . "/" . $folderPathThumb;
-        $fullPath = $_SERVER['DOCUMENT_ROOT'] . "/" . $folderPathFull;
+        $fullPath = $_SERVER['DOCUMENT_ROOT'] . "/pictures/users/";
         $ext = pathinfo($files['picture']['name'], PATHINFO_EXTENSION);
         $imageType = $sourceProperties[2];
+
+        if (!is_dir($_SERVER['DOCUMENT_ROOT'] . "/pictures")) {
+            mkdir($_SERVER['DOCUMENT_ROOT'] . "/pictures");
+        }
+        if (!is_dir($_SERVER['DOCUMENT_ROOT'] . "/pictures/users")) {
+            mkdir($_SERVER['DOCUMENT_ROOT'] . "/pictures/users");
+        }
 
 
         switch ($imageType) {
@@ -101,7 +105,7 @@ class Upload
 
             default:
                 echo "Invalid Image type.";
-                return false;
+                return "";
         }
 
         move_uploaded_file($file, $fullPath . $_SESSION["username"] );

@@ -3,17 +3,22 @@
 
 class Advert
 {
-    private int $id, $user_id,$price;
+    private int $id,$price;
     private string $title, $description;
+    private DateTime $createdAt;
+    private User $user;
+    private DB $db;
 
-    public function __construct($id, $user_id, $title, $price, $description)
+    public function __construct(int $id,  string $title, int $price, User $user, DateTime $createdAt, string $description)
     {
+        $this->db = new DB();
         $this->id = $id;
-        $this->user_id = $user_id;
+        $this->user = $user;
         $this->title = $title;
         $this->price = $price;
         $this->description = $description;
-       
+        $this->createdAt = $createdAt;
+
     }
 
 
@@ -33,20 +38,20 @@ class Advert
         $this->id = $id;
     }
         /**
-     * @return int
+     * @return User
      */
 
-    public function getUserId(): int
+    public function getUser(): User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
     /**
-     * @param int $user_id
+     * @param User $user
      */
-    public function setUserId(int $user_id): void
+    public function setUser(User $user): void
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
     }  
     
     /**
@@ -96,6 +101,14 @@ class Advert
   {
       $this->description = $description;
   }
+
+    /**
+     * @return string
+     */
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt->format("Y-m-d H:m:s");
+    }
 
     
 }

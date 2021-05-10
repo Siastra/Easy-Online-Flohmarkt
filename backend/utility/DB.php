@@ -1,7 +1,7 @@
 <?php
 
-include_once  $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/model/User.php';
-include_once  $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/model/Advert.php';
+include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/User.php';
+include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/Advert.php';
 
 class DB
 {
@@ -17,7 +17,7 @@ class DB
     public function __construct()
     {
 
-        $this->config = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/Easy-Online-Flohmarkt/config/config.json"),
+        $this->config = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/config/config.json"),
             true);
         $username = $this->config["db"]["user"];
         $password = $this->config["db"]["password"];
@@ -54,11 +54,84 @@ class DB
         }
     }
 
+    //Updates user data in the DB.
+    public function updateUser(User $user): bool
+    {
+        $stmt = $this->conn->prepare("UPDATE `users` SET title=?, fname=?, lname=?, address=?, plz=?, city=?, email=? 
+                                                WHERE id=?");
+        $title = $user->getTitle();
+        $fname = $user->getFname();
+        $lname = $user->getLname();
+        $address = $user->getAddress();
+        $plz = $user->getPlz();
+        $city = $user->getCity();
+        $email = $user->getEmail();
+        $id = $user->getId();
+        try {
+            if (!$stmt->execute([$title, $fname, $lname, $address, $plz, $city, $email, $id])) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
+            if (strpos($e->getMessage(), $existingkey) !== FALSE) { // duplicate username
+                return false;
+            } else {
+                throw $e;
+            }
+        }
+
+    }
+
+    //Updates profile picture in the DB.
+    public function updateProfilePic(int $id, string $path): bool
+    {
+        $stmt = $this->conn->prepare("UPDATE `users` SET picture=?
+                                                WHERE id=?");
+        if (!$stmt->execute([$path, $id])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     //Get a specific user by email
     public function getUser(string $email): ?User
     {
         $stmt = $this->conn->prepare("SELECT * FROM `users` WHERE email = ?");
         if ($stmt->execute([$email])) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (empty($row)) {
+                return null;
+            } else {
+                return new User($row["id"], $row["title"], $row["fname"], $row["lname"],
+                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"], $row["picture"]);
+            }
+        }
+        return null;
+    }
+
+    //Updates password in the DB.
+    public function updatePassword(User $user): bool
+    {
+        $stmt = $this->conn->prepare("UPDATE `users` SET password=? WHERE id=?");
+        $pw = $user->getPassword();
+        $hash = password_hash($pw, PASSWORD_DEFAULT);
+        $id = $user->getId();
+        if (!$stmt->execute([$hash, $id])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    //Get a specific user by id
+    public function getUserById(int $id): ?User
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM `users` WHERE id = ?");
+        if ($stmt->execute([$id])) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if (empty($row)) {
                 return null;
@@ -96,29 +169,31 @@ class DB
         }
     }
 
-    public function getPost($post_id){
-        $stmt = $this->conn->prepare("SELECT * FROM adv WHERE id = ?;");
-        $stmt_user = $this->conn->prepare("SELECT * FROM `users` WHERE id = ?;");
+    public function getAdById(int $post_id): ?Advert
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM adverts WHERE id = ?;");
         try {
-            $stmt->execute([(int)$post_id]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (count($result) > 0 && array_key_exists('user_id', $result)) {
-                $stmt_user->execute([$result['user_id']]);
-                $user = $stmt_user->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute([$post_id]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (empty($row)) {
+                return null;
+            } else {
+                return new Advert($row["id"], $row["title"], $row["price"], $this->getUserById($row["user_id"]),
+                    new DateTime($row["createdAt"]), $row["text"]);
             }
-            return ['post' => $result, 'author' => $user];
         } catch (PDOException $e) {
-            return [];
+            return null;
         }
     }
-    public function createAdv( Advert $adv): bool
+
+    public function createAdv(Advert $adv): bool
     {
         $stmt = $this->conn->prepare("INSERT INTO `adverts` (`id`, `title`, `price`, `user_id`, `createdAt`, 
                      `text`) 
-                     VALUES (NULL, ?, ?,  ?, 1,?);");
+                     VALUES (NULL, ?, ?, ?, ?, ?);");
         try {
             $stmt->execute([$adv->getTitle(), $adv->getPrice(),
-                $adv->getUserId(),$adv->getDescription()]);
+                $adv->getUser()->getId(), $adv->getCreatedAt() , $adv->getDescription()]);
             return true;
         } catch (PDOException $e) {
             $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
@@ -136,10 +211,10 @@ class DB
         $sql1 = $this->conn->prepare("SELECT * FROM `adverts`");
         $sql1->execute();
         $posts = $sql1->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($posts)){
-           foreach ($posts as $post){
-               //array_push($result, $post["text"]);
-                array_push($result, new Advert($post["id"], $post["user_id"], $post["title"], $post["price"], $post["text"]));
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                    $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
             }
         }
         return $result;
