@@ -21,7 +21,7 @@ $db = new DB();
                     <div class="row">
                         <div class="col form-group">
                             <label for="picture">Post image</label><br><br>
-                            <input type="file" id="picture" name="picture"   accept="image/x-png,image/jpeg"  required>
+                            <input type="file" id="picture" name="picture[]"   accept="image/x-png,image/jpeg"  multiple>
                         </div>
                     </div>
                     <div class="row">
@@ -58,6 +58,7 @@ $db = new DB();
             let reader = new FileReader();
 
             reader.onload = function (e) {
+                console.log(e.target.result);
                 $('#previewPost').attr('src', e.target.result);
             }
 

@@ -1,7 +1,7 @@
 <?php
 
-include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/User.php';
-include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/Advert.php';
+include_once  $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/model/User.php';
+include_once  $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/model/Advert.php';
 
 class DB
 {
@@ -17,7 +17,7 @@ class DB
     public function __construct()
     {
 
-        $this->config = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/config/config.json"),
+        $this->config = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/Easy-Online-Flohmarkt/config/config.json"),
             true);
         $username = $this->config["db"]["user"];
         $password = $this->config["db"]["password"];
@@ -143,5 +143,12 @@ class DB
             }
         }
         return $result;
+    }
+    public function getLatestAdvId():int{
+        $sql1 = $this->conn->prepare("SELECT MAX(id) FROM `adverts`");
+        $sql1->execute();
+        $advId = $sql1->fetch(PDO::FETCH_ASSOC);
+        var_dump($advId);
+        return $advId["MAX(id)"];
     }
 }
