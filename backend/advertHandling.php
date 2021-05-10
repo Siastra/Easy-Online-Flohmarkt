@@ -5,7 +5,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/utility
 $db = new DB();
 $user=$db->getUser($_SESSION['email']);
 $id=$user->getId();
-$advertisement = new Advert(1,$id, $_REQUEST["title"], $_REQUEST["price"],$_REQUEST["description"] ,$user, new DateTime());
+$advertisement = new Advert(1, $_REQUEST["title"], $_REQUEST["price"] ,$user, new DateTime(),$_REQUEST["description"]);
 $pic=$_FILES["picture"];
 $id=$user->getId();
 $advId=$db->getLatestAdvId();

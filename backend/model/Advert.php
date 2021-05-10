@@ -13,11 +13,11 @@ class Advert
     {
         $this->db = new DB();
         $this->id = $id;
-        $this->user = $user;
         $this->title = $title;
         $this->price = $price;
-        $this->description = $description;
+        $this->user = $user;
         $this->createdAt = $createdAt;
+        $this->description = $description;
 
     }
 
