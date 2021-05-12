@@ -207,6 +207,11 @@ class User
         return $this->favorites;
     }
 
+    public function haveFavorite($favorite)
+    {
+        return in_array($favorite, $this->favorites);
+    }
+
     public function setFavorites($favorites)
     {
         $this->favorites = $favorites;
