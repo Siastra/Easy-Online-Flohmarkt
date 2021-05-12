@@ -66,7 +66,15 @@
 <section class="container">
 <div class="row d-flex">
     <h1 class="mr-auto"><?= $post->getTitle() ?></h1>
+
+    <?php if (isset($user)) : ?>
+        <?php if ($user->haveFavorite($post->getId()))  :?>
+    <a id = "js-favorite" class="btn btn-outline-primary mt-2" style ="height: 60%" href="#"><i class="fas fa-star"></i> favorite</a>
+    <?php else :?>
     <a id = "js-favorite" class="btn btn-outline-primary mt-2" style ="height: 60%" href="#"><i class="far fa-star"></i> favorite</a>
+    <?php endif; ?>
+    <?php endif; ?>
+
     </div>
     <hr>
     <div class="container">

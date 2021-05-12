@@ -15,7 +15,7 @@
     align-content: center;
 }
 
-.card {
+/* .card {
     height: 370px;
     margin-top: auto;
     margin-bottom: auto;
@@ -25,7 +25,7 @@
 
 .card-header h3 {
     color: white;
-}
+} */
 
 .social_icon {
     position: absolute;
