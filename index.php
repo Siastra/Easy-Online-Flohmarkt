@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="res/css/bootstrap.min.css">
     <link rel="stylesheet" href="res/css/all.css">
     <link rel="stylesheet" href="css/eof.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link href="res/css/lightbox.css" rel="stylesheet">
     <link href="res/css/myCss.css" rel="stylesheet">
     <script src="res/js/lightbox-plus-jquery.js"></script>
@@ -32,37 +33,53 @@
     //Message-Banner
     if (isset($_GET["registration"]) && ($_GET["registration"] == "success")) {
         echo MsgFactory::getSuccess("<b>Registration was successful!</b> User account was created!");
-    }else if (isset($_GET["registration"]) && ($_GET["registration"] == "fail")){
+    } else if (isset($_GET["registration"]) && ($_GET["registration"] == "fail")) {
         echo MsgFactory::getWarning("<b>Registration failed!</b> Looks like there already exists an user account 
                                             with this E-Mail!");
-    }else if (isset($_GET["login"])){
+    } else if (isset($_GET["login"])) {
         if ($_GET["login"] == "success") {
             echo MsgFactory::getSuccess("<b>Login successful!</b>");
-        }else if ($_GET["login"] == "fail") {
+        } else if ($_GET["login"] == "fail") {
             if ($_GET["fail"] == "wrongPassword") {
                 echo MsgFactory::getWarning("<b>Login failed!</b> Looks like you have entered the wrong password!");
-            }else if ($_GET["fail"] == "account404"){
+            } else if ($_GET["fail"] == "account404") {
                 echo MsgFactory::getWarning("<b>Login failed!</b> Looks like there exists no account with this email!");
             }
         }
-    }else if (isset($_GET["logout"])){
+    } else if (isset($_GET["logout"])) {
         echo MsgFactory::getSuccess("<b>Logout successful!</b>");
+    } else if (isset($_GET["update"])) {
+        if ($_GET["update"] == "success") {
+            echo MsgFactory::getSuccess("<b>Update successful!</b>");
+        } else if ($_GET["update"] == "fail") {
+            echo MsgFactory::getWarning("<b>Update failed!</b>");
+        }
+    } else if (isset($_GET["updatePassword"])) {
+        if ($_GET["updatePassword"] == "success") {
+            echo MsgFactory::getSuccess("<b>Password Update successful!</b>");
+        } else if ($_GET["updatePassword"] == "fail") {
+            echo MsgFactory::getWarning("<b>Password Update failed!</b> Looks like something went wrong while updating your password");
+        } else if ($_GET["updatePassword"] == "wrongPassword") {
+            echo MsgFactory::getWarning("<b>Password Update failed!</b> Looks like you have entered your password wrong!");
+        }
     }
     ?>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <a class="navbar-brand" href="index.php?section=dashboard"><img src="res/images/dashboard.svg" alt="Dashboard icon" class="navbar-icon">
+        <a class="navbar-brand" href="index.php?section=dashboard"><img src="res/images/dashboard.svg"
+                                                                        alt="Dashboard icon" class="navbar-icon">
             Dashboard</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
                 <?php
-                if(isset($user)) {
+                if (isset($user)) {
                     echo '<li><a class="nav-link" href="index.php?section=create">
                        <img src="res/images/upload.svg" alt="Upload icon" class="navbar-icon"> New Ad</a></li>';
                 }
-                if(isset($user) && $user->isAdmin()) {
+                if (isset($user) && $user->isAdmin()) {
                     echo '<li class="nav-item">
                     <a class="nav-link" href="index.php?section=view">
                     <img src="res/images/administrator.svg" alt="Administration icon" class="navbar-icon">User Administration</a>
@@ -77,19 +94,19 @@
             </ul>
             <ul class="navbar-nav navbar-right">
                 <?php
-                if (isset($user) && (isset($_GET["section"]) && ($_GET["section"] == "userPage"))) {
+                if (isset($user) && (isset($_GET["section"]) && ($_GET["section"] == "profile"))) {
                     echo '<li><a class="nav-link" href="index.php?section=register&edit=true">
                         <img src="res/images/edit.svg" alt="Edit icon" class="navbar-icon">Edit profile</a></li>';
-                }else if (isset($user)) {
+                } else if (isset($user)) {
                     echo '<li><a class="nav-link" href="index.php?section=profile"><img src="' . $user->getPicture() . '" 
                         alt="User icon" class="navbar-icon" id="profilePic">Profile</a></li>';
                 }
-                if(isset($user)) {
+                if (isset($user)) {
                     echo '<li class="nav-item">
                             <a class="nav-link" href="backend/userHandling.php?type=logout"><img src="res/images/logout.svg" 
                             alt="Logout" class="navbar-icon"> Logout</a>
                       </li>';
-                }else{
+                } else {
                     echo '<li class="nav-item">
                             <a class="nav-link" href="index.php?section=login"><img src="res/images/login.svg" 
                             alt="Login" class="navbar-icon"> Login</a>
@@ -106,11 +123,11 @@
     //Section- Management
     if (isset($_REQUEST["section"])) {
         include "sites/" . $_REQUEST["section"] . ".php";
-    }else {
+    } else {
         include "sites/dashboard.php";
     }
     ?>
-    <script src="res/js/bootstrap.bundle.min.js" ></script>
+    <script src="res/js/bootstrap.bundle.min.js"></script>
 </main>
 </body>
 </html>

@@ -5,7 +5,7 @@ class User
 {
     private bool $admin;
     private int $id, $plz;
-    private ?string $picture;
+    private string $picture;
     private string $title, $fname, $lname, $address, $password, $email, $city;
     private $favorites=[];
 

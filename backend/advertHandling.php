@@ -1,16 +1,21 @@
 <?php
 session_start();
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/DB.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/Upload.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/utility/DB.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Easy-Online-Flohmarkt/backend/utility/Upload.php';
 $db = new DB();
 $user=$db->getUser($_SESSION['email']);
-$advertisement = new Advert(1, $_REQUEST["title"], $_REQUEST["price"], $user, new DateTime(), $_REQUEST["description"]);
-
-
+$id=$user->getId();
+$advertisement = new Advert(1, $_REQUEST["title"], $_REQUEST["price"] ,$user, new DateTime(),$_REQUEST["description"]);
+$pic=$_FILES["picture"];
+$id=$user->getId();
+$advId=$db->getLatestAdvId();
+var_dump($pic);
     if ($db->createAdv($advertisement)) {
-        $pic=$_FILES["picture"];
-        Upload::uploadPost($_FILES, $pic["name"]);
-        header("Location: ../index.php?section=dashboard");
+        for($i=0;$i<sizeof($pic["name"]);$i++){
+            Upload::uploadPost($_FILES, $pic["name"][$i],$id,$i,$advId);
+
+        }
+        //header("Location: ../index.php?section=dashboard");
     }else {
         header("Location: ../index.php?section=upload");
 }
