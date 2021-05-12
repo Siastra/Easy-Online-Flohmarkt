@@ -65,11 +65,14 @@
     }
 ?>
 <section class="container">
-    <h1><?= $post->getTitle() ?></h1>
+<div class="row d-flex">
+    <h1 class="mr-auto"><?= $post->getTitle() ?></h1>
+    <a id = "js-favorite" class="btn btn-outline-primary mt-2" style ="height: 60%" href="#"><i class="far fa-star"></i> favorite</a>
+    </div>
     <hr>
     <div class="container">
         <div class="row">
-            <div class="row col-8 image">
+            <div class="col-8 image mr-auto">
                 <div class="row mx-auto">
                     <?php
                         if (count($images)) {
@@ -90,7 +93,7 @@
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="col-4 price ">
+            <div class="col-4 price px-0">
                 <div class="row">  
                 <div class="col-12 text-center"  style = "font-size: larger; font-weight: 600; background-color: yellow; padding: 15px; margin-top: 20px;"> $<?= $post->getPrice()?> </div>
             </div>
@@ -114,5 +117,24 @@
     lightbox.option({
       'resizeDuration': 200,
       'wrapAround': true
+    })
+    $(document).ready(function(){
+        console.log("jquery is working");
+        $("#js-favorite").click(function(e){
+            e.preventDefault()
+            $.get("/favorite.php", {
+                "advert_id":<?= $post->getId(); ?>
+            },function (){
+                star = $("#js-favorite").find("i");
+                if (star.hasClass("fas")){
+                    star.removeClass("fas");
+                    star.addClass("far");
+                }
+                else {
+                    star.removeClass("far");
+                    star.addClass("fas");
+                }
+            })
+        })
     })
 </script>

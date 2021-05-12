@@ -105,8 +105,12 @@ class DB
             if (empty($row)) {
                 return null;
             } else {
-                return new User($row["id"], $row["title"], $row["fname"], $row["lname"],
-                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"], $row["picture"]);
+                $user = new User($row["id"], $row["title"], $row["fname"], $row["lname"],
+                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"]);
+                $favorites = [];
+                $favorites = $this->getFavoritesByUser($row["id"]);
+                $user->setFavorites($favorites);
+                return $user;
             }
         }
         return null;
@@ -126,6 +130,35 @@ class DB
         }
     }
 
+
+    public function updateFavoritesForUser($user, $post_id)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM `favorite` WHERE user_id = ? and advert_id = ?");
+        if ($stmt->execute([$user->getId(), $post_id])) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (empty($row)) {
+                $stmt = $this->conn->prepare("INSERT INTO `favorite` (user_id, advert_id) VALUES (?,?)");
+                $stmt->execute([$user->getId(), $post_id]);
+            } else {
+                $stmt = $this->conn->prepare("DELETE FROM `favorite` WHERE user_id = ? and advert_id = ?");
+                $stmt->execute([$user->getId(), $post_id]);
+            }
+            $favorites = $this->getFavoritesByUser($user->getId());
+            $user->setFavorites($favorites);
+        }
+    }
+
+    public function getFavoritesByUser($user_id)
+    {
+        $favorites = [];
+        $stmt = $this->conn->prepare("SELECT * FROM `favorite` WHERE user_id = ?");
+        if ($stmt->execute([$user_id])) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $favorites[] = $row["advert_id"];
+            }
+            }
+            return $favorites;
+    }
 
     //Get a specific user by id
     public function getUserById(int $id): ?User
@@ -193,7 +226,7 @@ class DB
                      VALUES (NULL, ?, ?, ?, ?, ?);");
         try {
             $stmt->execute([$adv->getTitle(), $adv->getPrice(),
-                $adv->getUser()->getId(), $adv->getCreatedAt() . str, $adv->getDescription()]);
+                $adv->getUser()->getId(), $adv->getCreatedAt(), $adv->getDescription()]);
             return true;
         } catch (PDOException $e) {
             $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
