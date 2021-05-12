@@ -7,6 +7,7 @@ class User
     private int $id, $plz;
     private ?string $picture;
     private string $title, $fname, $lname, $address, $password, $email, $city;
+    private $favorites=[];
 
     public function __construct($id, $title, $fname, $lname, $address, $plz, $city, $email, $password,
                                 $picture = "res/images/user.svg", $admin = 0)
@@ -199,5 +200,15 @@ class User
     public function setPicture(string $picture): void
     {
         $this->picture = $picture;
+    }
+
+    public function getFavorites()
+    {
+        return $this->favorites;
+    }
+
+    public function setFavorites($favorites)
+    {
+        $this->favorites = $favorites;
     }
 }
