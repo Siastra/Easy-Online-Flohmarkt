@@ -116,21 +116,6 @@ class DB
         return null;
     }
 
-    //Updates password in the DB.
-    public function updatePassword(User $user): bool
-    {
-        $stmt = $this->conn->prepare("UPDATE `users` SET password=? WHERE id=?");
-        $pw = $user->getPassword();
-        $hash = password_hash($pw, PASSWORD_DEFAULT);
-        $id = $user->getId();
-        if (!$stmt->execute([$hash, $id])) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-
     public function updateFavoritesForUser($user, $post_id)
     {
         $stmt = $this->conn->prepare("SELECT * FROM `favorite` WHERE user_id = ? and advert_id = ?");
@@ -159,6 +144,20 @@ class DB
             }
             return $favorites;
     }
+    //Updates password in the DB.
+    public function updatePassword(User $user): bool
+    {
+        $stmt = $this->conn->prepare("UPDATE `users` SET password=? WHERE id=?");
+        $pw = $user->getPassword();
+        $hash = password_hash($pw, PASSWORD_DEFAULT);
+        $id = $user->getId();
+        if (!$stmt->execute([$hash, $id])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     //Get a specific user by id
     public function getUserById(int $id): ?User

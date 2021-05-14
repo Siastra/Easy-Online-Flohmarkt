@@ -15,7 +15,7 @@ var_dump($pic);
             Upload::uploadPost($_FILES, $pic["name"][$i],$id,$i,$advId);
 
         }
-        header("Location: ../index.php?section=dashboard");
+        //header("Location: ../index.php?section=dashboard");
     }else {
         header("Location: ../index.php?section=upload");
 }
