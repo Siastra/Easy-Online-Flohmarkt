@@ -7,8 +7,8 @@
 <section id="LoginBody">
     <div class="container">
         <div class="d-flex justify-content-center h-100">
-            <div class="card">
-                <div class="card-header">
+            <div class="card card-login">
+                <div class=" card-header card-header-login">
                     <h3>Login</h3>
                 </div>
                 <div class="card-body">
