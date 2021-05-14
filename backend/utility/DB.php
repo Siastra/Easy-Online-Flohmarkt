@@ -1,7 +1,7 @@
 <?php
 
-include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/User.php';
-include_once  $_SERVER['DOCUMENT_ROOT'] . '/backend/model/Advert.php';
+include_once $_SESSION["path"] . '/backend/model/User.php';
+include_once $_SESSION["path"] . '/backend/model/Advert.php';
 
 class DB
 {
@@ -17,7 +17,7 @@ class DB
     public function __construct()
     {
 
-        $this->config = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/config/config.json"),
+        $this->config = json_decode(file_get_contents($_SESSION["path"] . "/config/config.json"),
             true);
         $username = $this->config["db"]["user"];
         $password = $this->config["db"]["password"];
@@ -122,10 +122,10 @@ class DB
         if ($stmt->execute([$user->getId(), $post_id])) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if (empty($row)) {
-                $stmt = $this->conn->prepare("INSERT INTO `favorite` (user_id, advert_id) VALUES (?,?)"); 
+                $stmt = $this->conn->prepare("INSERT INTO `favorite` (user_id, advert_id) VALUES (?,?)");
                 $stmt->execute([$user->getId(), $post_id]);
             } else {
-                $stmt = $this->conn->prepare("DELETE FROM `favorite` WHERE user_id = ? and advert_id = ?"); 
+                $stmt = $this->conn->prepare("DELETE FROM `favorite` WHERE user_id = ? and advert_id = ?");
                 $stmt->execute([$user->getId(), $post_id]);
             }
             $favorites = $this->getFavoritesByUser($user->getId());

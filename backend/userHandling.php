@@ -1,10 +1,10 @@
 <?php
-
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/DB.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/upload.php';
+session_start();
+include_once $_SESSION["path"] . '/backend/utility/DB.php';
+include_once $_SESSION["path"] . '/backend/utility/upload.php';
 
 $db = new DB();
-session_start();
+
 if ($_REQUEST["type"] == "insert") {
     $user = new User(1, $_REQUEST["title"], $_REQUEST["fname"], $_REQUEST["lname"],
         $_REQUEST["address"], $_REQUEST["plz"], $_REQUEST["city"], $_REQUEST["email"], $_REQUEST["pw"], );

@@ -28,9 +28,9 @@ class Upload
         $folderPathDash = $tmpPath.'/half/';
         $folderPathThumb = $tmpPath.'/thumbnail/';
         $folderPathFull = $tmpPath.'/full/';
-        $fullPathDash = getcwd() . "/" . $folderPathDash;
-        $fullPathThumb = getcwd() . "/" . $folderPathThumb;
-        $fullPath = getcwd() . "/" . $folderPathFull;
+        $fullPathDash = $_SESSION["path"] . "/" . $folderPathDash;
+        $fullPathThumb = $_SESSION["path"] . "/" . $folderPathThumb;
+        $fullPath = $_SESSION["path"] . "/" . $folderPathFull;
         $ext = pathinfo($files['picture']['name'][$i], PATHINFO_EXTENSION);
         $imageType = $sourceProperties[2];
 
@@ -74,15 +74,22 @@ class Upload
     {
         $file = $files['picture']['tmp_name'];
         $sourceProperties = getimagesize($file);
-        $fullPath = $_SERVER['DOCUMENT_ROOT'] . "/pictures/users/";
+        $fullPath = $_SESSION["path"] . "/pictures/users/";
         $ext = pathinfo($files['picture']['name'], PATHINFO_EXTENSION);
         $imageType = $sourceProperties[2];
 
-        if (!is_dir($_SERVER['DOCUMENT_ROOT'] . "/pictures")) {
-            mkdir($_SERVER['DOCUMENT_ROOT'] . "/pictures");
+        if (!is_dir($_SESSION["path"] . "/pictures")) {
+            mkdir($_SESSION["path"] . "/pictures");
         }
-        if (!is_dir($_SERVER['DOCUMENT_ROOT'] . "/pictures/users")) {
-            mkdir($_SERVER['DOCUMENT_ROOT'] . "/pictures/users");
+        if (!is_dir($_SESSION["path"] . "/pictures/users")) {
+            mkdir($_SESSION["path"] . "/pictures/users");
+        }
+
+        if (is_file($_SESSION["path"] . "/pictures/users/" . $uid . ".jpg")) {
+            unlink($_SESSION["path"] . "/pictures/users/" . $uid . ".jpg");
+        }
+        if (is_file($_SESSION["path"] . "/pictures/users/" . $uid . ".png")) {
+            unlink($_SESSION["path"] . "/pictures/users/" . $uid . ".png");
         }
 
 
@@ -92,14 +99,14 @@ class Upload
             case IMAGETYPE_PNG:
                 $imageResourceId = imagecreatefrompng($file);
                 $targetLayer = self::imageResizeThump($imageResourceId, $sourceProperties[0], $sourceProperties[1]);
-                imagepng($targetLayer, $fullPathThumb . $_SESSION["username"]);
+                imagepng($targetLayer, $fullPath . $uid . "." . $ext);
                 break;
 
 
             case IMAGETYPE_JPEG:
                 $imageResourceId = imagecreatefromjpeg($file);
                 $targetLayer = self::imageResizeThump($imageResourceId, $sourceProperties[0], $sourceProperties[1]);
-                imagejpeg($targetLayer, $fullPathThumb . $_SESSION["username"] );
+                imagepng($targetLayer, $fullPath . $uid . "." . $ext);
                 break;
 
 
@@ -108,8 +115,7 @@ class Upload
                 return "";
         }
 
-        move_uploaded_file($file, $fullPath . $_SESSION["username"] );
-        return true;
+        return "pictures/users/" . $uid . "." . $ext;
     }
 
     private static function imageResizeThump($imageResourceId, $width, $height)
