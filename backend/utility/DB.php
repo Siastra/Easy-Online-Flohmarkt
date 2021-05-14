@@ -106,7 +106,7 @@ class DB
                 return null;
             } else {
                 $user = new User($row["id"], $row["title"], $row["fname"], $row["lname"],
-                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"]);
+                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"], $row["picture"]);
                 $favorites = [];
                 $favorites = $this->getFavoritesByUser($row["id"]);
                 $user->setFavorites($favorites);

@@ -58,7 +58,6 @@ $db = new DB();
             let reader = new FileReader();
 
             reader.onload = function (e) {
-                console.log(e.target.result);
                 $('#previewPost').attr('src', e.target.result);
             }
 
