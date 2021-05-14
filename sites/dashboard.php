@@ -11,7 +11,7 @@ $adverts = $db->getAllPosts();
     <div class="h-100 row align-items-center dash-container">
         <?php foreach ($adverts as $ad) : ?>
             <div class="col-lg-2 col-sm-3 col-6 card m-2 p-0">
-                <a class="link-dark" href="/index.php?section=post&id=<?=$ad->getId()?>">
+                <a class="link-dark" href="index.php?section=post&id=<?=$ad->getId()?>">
                 <div class="card-header text-center text-dark"><?=$ad->getTitle()?></div>
                 <div class="card-body text-center">
                         <img class='dash-ad-img' src="/res/images/car.jpg">
