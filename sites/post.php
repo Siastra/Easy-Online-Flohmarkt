@@ -1,27 +1,28 @@
 <?php
-    include_once $_SERVER["DOCUMENT_ROOT"] . "/backend/utility/DB.php";
+    include_once $_SESSION["path"] . "/backend/utility/DB.php";
     $db = new DB();
     $post = $db->getAdById(intval($_REQUEST["id"]));
 
     $images = [
     "/res/images/car.jpg",  "/res/images/car.jpg", "/res/images/car2.jpeg", "/res/images/baguette.png"];
     function cropThumbnail ($image) {
+        $root = $_SESSION["path"] . "/..";
         $filepath = pathinfo($image);
         $filename = '/res/images/thumb/' . $filepath['filename'].'.jpg';
-        if (is_dir($_SERVER["DOCUMENT_ROOT"] . '/res/images/thumb/') && is_file( $_SERVER["DOCUMENT_ROOT"] . $filename)) {
+        if (is_dir($root . '/res/images/thumb/') && is_file( $root . $filename)) {
             return $filename;
         }
         try {
         
         if (in_array($filepath['extension'], ['jpeg', 'jpg'])) {
-            $image = imagecreatefromjpeg($_SERVER["DOCUMENT_ROOT"] . $image);
+            $image = imagecreatefromjpeg($root . $image);
         } else if ($filepath['extension'] == 'png') {
-            $image = imagecreatefrompng($_SERVER["DOCUMENT_ROOT"] . $image);
+            $image = imagecreatefrompng($root . $image);
         } else {
             return "/res/images/No-Image-Found.png";
         }
-        if (!is_dir($_SERVER["DOCUMENT_ROOT"] . '/res/images/thumb/')) {
-            mkdir($_SERVER["DOCUMENT_ROOT"] . '/res/images/thumb/', 0755, true);
+        if (!is_dir($root . '/res/images/thumb/')) {
+            mkdir($root . '/res/images/thumb/', 0755, true);
         }
 
         $thumb_width = 150;
@@ -56,7 +57,7 @@
                         0, 0,
                         $new_width, $new_height,
                         $width, $height);
-        imagejpeg($thumb, $_SERVER["DOCUMENT_ROOT"] . $filename, 80);
+        imagejpeg($thumb, $root . $filename, 80);
         return $filename;
         } catch (\Throwable $e) {
             die($e->getMessage());

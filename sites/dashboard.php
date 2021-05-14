@@ -1,6 +1,6 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/model/Advert.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/DB.php';
+include_once $_SESSION["path"] . '/backend/model/Advert.php';
+include_once $_SESSION["path"] . '/backend/utility/DB.php';
 
 $db = new DB();
 $adverts = $db->getAllPosts();

@@ -11,9 +11,9 @@ class Upload
         $folderPathDash = '../pictures/dashboard/';
         $folderPathThumb = '../pictures/thumbnail/';
         $folderPathFull = '../pictures/full/';
-        $fullPathDash = getcwd() . "/" . $folderPathDash;
-        $fullPathThumb = getcwd() . "/" . $folderPathThumb;
-        $fullPath = getcwd() . "/" . $folderPathFull;
+        $fullPathDash = $_SESSION["path"] . "/" . $folderPathDash;
+        $fullPathThumb = $_SESSION["path"] . "/" . $folderPathThumb;
+        $fullPath = $_SESSION["path"] . "/" . $folderPathFull;
         $ext = pathinfo($files['picture']['name'], PATHINFO_EXTENSION);
         $imageType = $sourceProperties[2];
 
@@ -57,15 +57,22 @@ class Upload
     {
         $file = $files['picture']['tmp_name'];
         $sourceProperties = getimagesize($file);
-        $fullPath = $_SERVER['DOCUMENT_ROOT'] . "/pictures/users/";
+        $fullPath = $_SESSION["path"] . "/pictures/users/";
         $ext = pathinfo($files['picture']['name'], PATHINFO_EXTENSION);
         $imageType = $sourceProperties[2];
 
-        if (!is_dir($_SERVER['DOCUMENT_ROOT'] . "/pictures")) {
-            mkdir($_SERVER['DOCUMENT_ROOT'] . "/pictures");
+        if (!is_dir($_SESSION["path"] . "/pictures")) {
+            mkdir($_SESSION["path"] . "/pictures");
         }
-        if (!is_dir($_SERVER['DOCUMENT_ROOT'] . "/pictures/users")) {
-            mkdir($_SERVER['DOCUMENT_ROOT'] . "/pictures/users");
+        if (!is_dir($_SESSION["path"] . "/pictures/users")) {
+            mkdir($_SESSION["path"] . "/pictures/users");
+        }
+
+        if (is_file($_SESSION["path"] . "/pictures/users/" . $uid . ".jpg")) {
+            unlink($_SESSION["path"] . "/pictures/users/" . $uid . ".jpg");
+        }
+        if (is_file($_SESSION["path"] . "/pictures/users/" . $uid . ".png")) {
+            unlink($_SESSION["path"] . "/pictures/users/" . $uid . ".png");
         }
 
 

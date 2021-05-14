@@ -1,7 +1,7 @@
 <?php
 session_start();
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/DB.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/Upload.php';
+include_once $_SESSION["path"] . '/backend/utility/DB.php';
+include_once $_SESSION["path"] . '/backend/utility/Upload.php';
 $db = new DB();
 $user=$db->getUser($_SESSION['email']);
 $advertisement = new Advert(1, $_REQUEST["title"], $_REQUEST["price"], $user, new DateTime(), $_REQUEST["description"]);

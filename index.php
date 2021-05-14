@@ -20,8 +20,9 @@
 <header>
     <?php
     session_start();
-    include_once $_SERVER["DOCUMENT_ROOT"] . "/backend/utility/MsgFactory.php";
-    include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/utility/DB.php';
+    $_SESSION["path"] = getcwd();
+    include_once $_SESSION["path"] . "/backend/utility/MsgFactory.php";
+    include_once $_SESSION["path"] . '/backend/utility/DB.php';
 
     $db = new DB();
 

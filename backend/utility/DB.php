@@ -1,7 +1,7 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/model/User.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/backend/model/Advert.php';
+include_once $_SESSION["path"] . '/backend/model/User.php';
+include_once $_SESSION["path"] . '/backend/model/Advert.php';
 
 class DB
 {
@@ -17,7 +17,7 @@ class DB
     public function __construct()
     {
 
-        $this->config = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/config/config.json"),
+        $this->config = json_decode(file_get_contents($_SESSION["path"] . "/config/config.json"),
             true);
         $username = $this->config["db"]["user"];
         $password = $this->config["db"]["password"];
