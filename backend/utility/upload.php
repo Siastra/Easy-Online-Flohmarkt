@@ -6,13 +6,16 @@ class Upload
 
     public static function uploadPost(array $files, string $fileNewName,int $id,int $i,int $advId): bool
     {
-        if(!is_dir('../pictures/Adds')){
-            mkdir('../pictures/Adds');
+        if(!is_dir($_SESSION["path"] .'/pictures')){
+            mkdir($_SESSION["path"] . '/pictures');
         }
-        if(!is_dir('../pictures/Adds/'.$advId)){
-            mkdir('../pictures/Adds/'.$advId );
+        if(!is_dir($_SESSION["path"] .'/pictures/Adds')){
+            mkdir($_SESSION["path"] . '/pictures/Adds');
         }
-        $tmpPath='../pictures/Adds/'.$advId;
+        if(!is_dir($_SESSION["path"] . '/pictures/Adds/' . $advId)){
+            mkdir($_SESSION["path"] . '/pictures/Adds/' . $advId );
+        }
+        $tmpPath= $_SESSION["path"] . '/pictures/Adds/' . $advId;
         if(!is_dir($tmpPath.'/full/')){
             mkdir( $tmpPath.'/full/');
         }
@@ -23,14 +26,10 @@ class Upload
             mkdir( $tmpPath.'/half/');
         }
         $file = $files['picture']['tmp_name'][$i];
-        var_dump($file);
         $sourceProperties = getimagesize($file);
-        $folderPathDash = $tmpPath.'/half/';
-        $folderPathThumb = $tmpPath.'/thumbnail/';
-        $folderPathFull = $tmpPath.'/full/';
-        $fullPathDash = $_SESSION["path"] . "/" . $folderPathDash;
-        $fullPathThumb = $_SESSION["path"] . "/" . $folderPathThumb;
-        $fullPath = $_SESSION["path"] . "/" . $folderPathFull;
+        $fullPathDash = $tmpPath .'/half/';
+        $fullPathThumb = $tmpPath . "/thumbnail/";
+        $fullPath = $tmpPath . "/full/";
         $ext = pathinfo($files['picture']['name'][$i], PATHINFO_EXTENSION);
         $imageType = $sourceProperties[2];
 

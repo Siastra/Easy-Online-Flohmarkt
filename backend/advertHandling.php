@@ -8,14 +8,14 @@ $id=$user->getId();
 $advertisement = new Advert(1, $_REQUEST["title"], $_REQUEST["price"] ,$user, new DateTime(),$_REQUEST["description"]);
 $pic=$_FILES["picture"];
 $id=$user->getId();
-$advId=$db->getLatestAdvId();
-var_dump($pic);
+
     if ($db->createAdv($advertisement)) {
+        $advId=$db->getLatestAdvId();
         for($i=0;$i<sizeof($pic["name"]);$i++){
             Upload::uploadPost($_FILES, $pic["name"][$i],$id,$i,$advId);
 
         }
-        //header("Location: ../index.php?section=dashboard");
+        header("Location: ../index.php?section=dashboard");
     }else {
         header("Location: ../index.php?section=upload");
 }
