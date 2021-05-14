@@ -15,7 +15,7 @@
     align-content: center;
 }
 
-/* .card {
+.card-login {
     height: 370px;
     margin-top: auto;
     margin-bottom: auto;
@@ -23,9 +23,9 @@
     background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
-.card-header h3 {
+.card-header-login h3 {
     color: white;
-} */
+}
 
 .social_icon {
     position: absolute;
