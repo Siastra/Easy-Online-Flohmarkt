@@ -144,6 +144,20 @@ class DB
             }
             return $favorites;
     }
+
+    public function getFavoritesAdverts($user_id)
+    {
+        $favorites = [];
+        $stmt = $this->conn->prepare("SELECT * FROM `adverts` WHERE id in (SELECT advert_id FROM favorite WHERE user_id = ?)");
+        if ($stmt->execute([$user_id])) {
+            while ($post = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        array_push($favorites, new Advert($post["id"], $post["title"], $post["price"],
+                            $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+            }
+            }
+            return $favorites;
+    }
+
     //Updates password in the DB.
     public function updatePassword(User $user): bool
     {

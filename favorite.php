@@ -13,4 +13,3 @@
         echo "{}"; die;
     }
     $db->updateFavoritesForUser($user, $advert_id);
-    //var_dump ($user);

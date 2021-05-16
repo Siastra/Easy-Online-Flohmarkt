@@ -77,6 +77,8 @@
                 if (isset($user)) {
                     echo '<li><a class="nav-link" href="index.php?section=create">
                        <img src="res/images/upload.svg" alt="Upload icon" class="navbar-icon"> New Ad</a></li>';
+                    echo '<li><a class="nav-link" href="index.php?section=favorites">
+                        <i class="far fa-star" style = "color: black; font-size: 24px; vertical-align: middle;"></i>  Favorites</a></li>';
                 }
                 if (isset($user) && $user->isAdmin()) {
                     echo '<li class="nav-item">

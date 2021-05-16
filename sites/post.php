@@ -6,7 +6,7 @@
     $images = [
     "/res/images/car.jpg",  "/res/images/car.jpg", "/res/images/car2.jpeg", "/res/images/baguette.png"];
     function cropThumbnail ($image) {
-        $root = $_SESSION["path"] . "/..";
+        $root = $_SESSION["path"] . "/";
         $filepath = pathinfo($image);
         $filename = '/res/images/thumb/' . $filepath['filename'].'.jpg';
         if (is_dir($root . '/res/images/thumb/') && is_file( $root . $filename)) {

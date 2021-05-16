@@ -10,6 +10,7 @@ if ($_REQUEST["type"] == "insert") {
         $_REQUEST["address"], $_REQUEST["plz"], $_REQUEST["city"], $_REQUEST["email"], $_REQUEST["pw"], );
     if ($db->registerUser($user)) {
         $user = $db->getUser($_REQUEST["email"]);
+        if ($_FILES["picture"]["size"])
         $path = Upload::uploadProfilePicture($_FILES, $user->getId());
         if (strlen($path) > 1) {
             $db->updateProfilePic($user->getId(), $path);
