@@ -284,6 +284,7 @@ class DB
         }
         return $result;
     }
+
     public function getLatestAdvId():int{
         $sql1 = $this->conn->prepare("SELECT MAX(id) FROM `adverts`");
         $sql1->execute();
@@ -306,5 +307,40 @@ class DB
         return $result;
 
 
+    }
+    public function getAllCategories(): array
+    {
+        $result = array();
+        $sql = $this->conn->prepare("SELECT * FROM `categories`");
+        $sql->execute();
+        $categories = $sql->fetchAll(PDO::FETCH_ASSOC);
+        if(!empty($categories)){
+            foreach ($categories as $category){
+                array_push($result, $category["name"]);
+            }
+        }
+        return $result;
+    }
+
+    public function getAdvByCategory(string $searchText):array{
+        $result = array();
+        $searchText="%".$searchText."%";
+        $sql1 = $this->conn->prepare("SELECT `id` FROM `categories` WHERE `name` LIKE ?");
+        $sql1->execute([$searchText]);
+        $tags = $sql1->fetchAll(PDO::FETCH_ASSOC);
+        if (!empty($tags)) {
+            foreach ($tags as $tag) {
+                $sql2 = $this->conn->prepare("SELECT `advert_id` FROM `is_assigned` WHERE `category_id` = ?");
+                $sql2->execute([$tag["id"]]);
+                $adverts = $sql2->fetchAll(PDO::FETCH_ASSOC);
+                if(!empty($adverts)) {
+                    foreach ($adverts as $advert) {
+                        array_push($result, $this->getAdById($advert["advert_id"]));
+
+                    }
+                }
+            }
+        }
+        return $result;
     }
 }
