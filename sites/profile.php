@@ -43,7 +43,7 @@ $ads = $db->getAdsByUser($user->getId());
                         </div>
                     </div>
                     <div class="row">
-                        <a class="col" href="index.php?section=dash#ad' . ($ads[$i]->getId()) . '"><img alt="' . $ads[$i]->getTitle() .
+                        <a class="col" href="index.php?section=post&id=' . ($ads[$i]->getId()) . '"><img alt="' . $ads[$i]->getTitle() .
                 '" src="' . $ads[$i]->getPicture() . '"></a>
                     </div>
                 </div>';
