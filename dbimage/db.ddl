@@ -58,7 +58,7 @@ CREATE TABLE `favorite` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
 
 CREATE TABLE `categories` (
-	`id` int(11) NOT NULL,
+	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(128) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -66,7 +66,7 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 CREATE TABLE `is_assigned` (
-	`id` int(11) NOT NULL,
+	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`advert_id` int(11) NOT NULL,
 	`category_id` int(11) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

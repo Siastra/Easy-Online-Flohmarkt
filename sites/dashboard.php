@@ -6,7 +6,11 @@ $db = new DB();
 if(isset($_GET['search'])){
     $searchTerm=$_GET["search"];
     $adverts = $db->getAdvByText($searchTerm);
-}else{
+}elseif(isset($_GET["category"])){
+    $searchTerm=$_GET["category"];
+    $adverts = $db->getAdvByCategory($searchTerm);
+}
+else{
     $adverts = $db->getAllPosts();
 }
 ?>
