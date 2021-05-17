@@ -3,7 +3,12 @@ include_once $_SESSION["path"] . '/backend/model/Advert.php';
 include_once $_SESSION["path"] . '/backend/utility/DB.php';
 
 $db = new DB();
-$adverts = $db->getAllPosts();
+if(isset($_GET['search'])){
+    $searchTerm=$_GET["search"];
+    $adverts = $db->getAdvByText($searchTerm);
+}else{
+    $adverts = $db->getAllPosts();
+}
 ?>
 <section id="dashboard" class="container-fluid section-dash">
     <h1 style="text-align: center">Dash</h1>

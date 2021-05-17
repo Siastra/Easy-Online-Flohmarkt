@@ -271,4 +271,20 @@ class DB
         $advId = $sql1->fetch(PDO::FETCH_ASSOC);
         return (($advId["MAX(id)"]) ? $advId["MAX(id)"] : 0);
     }
+    //get AdvId by Text
+    public function getAdvByText(string $searchText):array{
+        $result = array();
+        $sql = $this->conn->prepare("SELECT * FROM `adverts` WHERE `text` =? ");
+        $sql->execute([$searchText]);
+        $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                    $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+            }
+        }
+        return $result;
+
+
+    }
 }
