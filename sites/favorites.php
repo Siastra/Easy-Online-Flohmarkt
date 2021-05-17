@@ -17,7 +17,7 @@ $adverts = $db->getFavoritesAdverts($user->getId());
                 <a class="link-dark" href="index.php?section=post&id=<?=$ad->getId()?>">
                 <div class="card-header text-center text-dark"><?=$ad->getTitle()?></div>
                 <div class="card-body text-center">
-                        <img class='dash-ad-img' src="/res/images/car.jpg">
+                        <img class='dash-ad-img' src="<?= $ad->getPicture() ?>">
                         <p class='dash-ad-price text-dark'><?=$ad->getPrice()?>€</p>
                         </div>
                         </a>
@@ -33,7 +33,7 @@ $adverts = $db->getFavoritesAdverts($user->getId());
             let ct = e.currentTarget;
             let id = $(ct).data("id");
             console.log(id);
-            $.get("/favorite.php", {advert_id : id}, function () {
+            $.get("<?php echo $_SESSION["relPath"] ?>/favorite.php", {advert_id : id}, function () {
                 $(ct).parents(".card").hide();
             })
         })

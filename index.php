@@ -19,6 +19,7 @@
     <?php
     session_start();
     $_SESSION["path"] = getcwd();
+    $_SESSION["relPath"] = ((dirname($_SERVER["PHP_SELF"]) == "\\") ? "" : dirname($_SERVER["PHP_SELF"]));
     include_once $_SESSION["path"] . "/backend/utility/MsgFactory.php";
     include_once $_SESSION["path"] . '/backend/utility/DB.php';
 

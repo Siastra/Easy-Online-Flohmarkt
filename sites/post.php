@@ -89,7 +89,7 @@
                             $limage = "/res/images/No-Image-Found.png";
                         }
                     ?>
-                    <a href="<?=$limage?>" data-lightbox="roadtrip"><img class = "col-12" src="<?=$limage?>" ></a>
+                    <a href="<?=$limage?>" data-lightbox="roadtrip"><img class = "col-12" src="<?= $limage?>" ></a>
                 </div>
                 <div class="row col-12 mt-2 ">
                     <?php if (count($images)) : ?>
@@ -130,10 +130,10 @@
         console.log("jquery is working");
         $("#js-favorite").click(function(e){
             e.preventDefault()
-            $.get("/favorite.php", {
+            $.get("<?php echo $_SESSION["relPath"] ?>/favorite.php", {
                 "advert_id":<?= $post->getId(); ?>
             },function (){
-                star = $("#js-favorite").find("i");
+                let star = $("#js-favorite").find("i");
                 if (star.hasClass("fas")){
                     star.removeClass("fas");
                     star.addClass("far");

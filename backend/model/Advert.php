@@ -113,10 +113,10 @@ class Advert
     public function getPicture(): string
     {
         if (file_exists($_SESSION["path"] ."/pictures/Adds/".$this->id."/thumbnail/0.jpg")) {
-            return ((dirname($_SERVER["PHP_SELF"]) == "\\") ? "" : dirname($_SERVER["PHP_SELF"])) ."/pictures/Adds/".$this->id."/thumbnail/0.jpg";
+            return $_SESSION["relPath"] ."/pictures/Adds/".$this->id."/thumbnail/0.jpg";
         }
         if (file_exists($_SESSION["path"] ."/pictures/Adds/".$this->id."/thumbnail/0.png")) {
-            return ((dirname($_SERVER["PHP_SELF"]) == "\\") ? "" : dirname($_SERVER["PHP_SELF"])) ."/pictures/Adds/".$this->id."/thumbnail/0.png";
+            return $_SESSION["relPath"] ."/pictures/Adds/".$this->id."/thumbnail/0.png";
         }
         return "Test";
     }

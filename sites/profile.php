@@ -64,7 +64,6 @@ $ads = $db->getAdsByUser($user->getId());
         }).then(
             function() {
                 location.reload();
-            }, function() {
             }
         );
 
