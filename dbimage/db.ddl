@@ -56,3 +56,28 @@ CREATE TABLE `favorite` (
  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+
+CREATE TABLE `categories` (
+	`id` int(11) NOT NULL,
+	`name` VARCHAR(128) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`);
+
+CREATE TABLE `is_assigned` (
+	`id` int(11) NOT NULL,
+	`advert_id` int(11) NOT NULL,
+	`category_id` int(11) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `is_assigned`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `is_assigned`
+  ADD CONSTRAINT is_assigned_advert_fk FOREIGN KEY ( advert_id )
+ REFERENCES `adverts` ( id );
+
+ALTER TABLE `is_assigned`
+  ADD CONSTRAINT is_assigned_category_fk FOREIGN KEY ( category_id )
+ REFERENCES `categories` ( id );
