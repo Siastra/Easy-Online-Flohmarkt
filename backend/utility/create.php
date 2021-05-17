@@ -31,6 +31,7 @@ class Upload
         $fullPathThumb = $tmpPath . "/thumbnail/";
         $fullPath = $tmpPath . "/full/";
         $ext = pathinfo($files['picture']['name'][$i], PATHINFO_EXTENSION);
+        $fileNewName=$i.".".$ext;
         $imageType = $sourceProperties[2];
 
 
