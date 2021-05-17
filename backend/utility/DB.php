@@ -232,6 +232,25 @@ class DB
         }
     }
 
+    public function getAdsByUser(int $u_id): ?array
+    {
+        $result = array();
+        $stmt = $this->conn->prepare("SELECT * FROM adverts WHERE user_id = ?;");
+        try {
+            $stmt->execute([$u_id]);
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (!empty($res)) {
+                foreach ($res as $post) {
+                    array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                        $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+                }
+            }
+            return $result;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
     public function createAdv(Advert $adv): bool
     {
         $stmt = $this->conn->prepare("INSERT INTO `adverts` (`id`, `title`, `price`, `user_id`, `createdAt`, 
