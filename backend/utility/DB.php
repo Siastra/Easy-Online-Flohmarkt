@@ -293,7 +293,8 @@ class DB
     //get AdvId by Text
     public function getAdvByText(string $searchText):array{
         $result = array();
-        $sql = $this->conn->prepare("SELECT * FROM `adverts` WHERE `text` =? ");
+        $searchText="%".$searchText."%";
+        $sql = $this->conn->prepare("SELECT * FROM `adverts` WHERE `text` LIKE  ? ");
         $sql->execute([$searchText]);
         $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
         if (!empty($posts)) {
