@@ -121,5 +121,9 @@ class Advert
         return "Test";
     }
 
+    public function getCategory()
+    {
+        return $this->db->getPostCategory($this->id);
+    }
     
 }

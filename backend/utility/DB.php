@@ -307,4 +307,17 @@ class DB
 
 
     }
+
+    public function getPostCategory($post_id){
+        $q = $this->conn->prepare("select * from is_assigned where advert_id = :advert_id");
+        $q->execute([":advert_id" => $post_id]);
+        $f = $q->fetch(PDO::FETCH_ASSOC);
+        if ($f){
+            $category_id = $f["category_id"];
+            $q = $this->conn->prepare("select * from categories where id = :id");
+            $q->execute([":id" => $category_id]);
+            $f = $q->fetch(PDO::FETCH_ASSOC);
+        }
+        return $f;
+    }
 }
