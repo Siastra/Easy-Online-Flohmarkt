@@ -81,3 +81,12 @@ ALTER TABLE `is_assigned`
 ALTER TABLE `is_assigned`
   ADD CONSTRAINT is_assigned_category_fk FOREIGN KEY ( category_id )
  REFERENCES `categories` ( id );
+
+ CREATE TABLE `comment` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `author_id` int(11) NOT NULL,
+ `user_id` int(11) NOT NULL,
+ `comment` varchar(500) COLLATE utf8_bin NOT NULL,
+ `score` int(2) NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin

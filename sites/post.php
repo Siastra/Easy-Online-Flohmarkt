@@ -122,7 +122,24 @@
             </div>
             <div class="row"> 
                 <div class="container"><div class="row"><?= $post->getUser()->getFname() ?> <?= $post->getUser()->getLname() ?></div>
-                <div class="row"><?= $post->getUser()->getAddress() ?></div></div>
+                <div class="row"><?= $post->getUser()->getAddress() ?></div>
+                <div class="row">
+                <div class="score">
+                <?= sprintf("%01.2f", $post->getUser()->getScore());?>
+                </div>
+                <div class="score_star">
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <?php $tmp = $post->getUser()->getScore() - $i;?>
+                    <?php if ($tmp >= 0): ?>
+                        <i class="fas fa-star"></i>
+                    <?php elseif ($tmp > -1): ?>
+                        <i class="fas fa-star-half-alt"></i>
+                    <?php else: ?>
+                        <i class="far fa-star"></i>
+                    <?php endif; ?>
+                <?php endfor; ?>
+                </div>
+                </div></div>
             </div>
             </div>
         </div>
