@@ -90,6 +90,12 @@ body {
     margin-left: 40px;
 }
 
+.galleryItem{
+    width: 100%;
+    margin: 1%;
+    background-color: #d0c7ff;
+}
+
 .user-header {
     padding: 5% 0 3% 0;
     border-bottom: black solid 2px;
@@ -105,4 +111,19 @@ body {
 
 .score_star {
     color: orangered;
+}
+
+.adPic{
+    max-width: 100%;
+    max-height: 100%;
+    display: block; /* remove extra space below image */
+}
+
+@media screen and (max-width: 800px) {
+    .user-picture {
+        margin: 0 0 0 15%;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+    }
 }
