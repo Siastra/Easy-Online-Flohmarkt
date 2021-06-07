@@ -8,6 +8,7 @@ class User
     private string $picture;
     private string $title, $fname, $lname, $address, $password, $email, $city;
     private $favorites=[];
+    private $score;
 
     public function __construct($id, $title, $fname, $lname, $address, $plz, $city, $email, $password,
                                 $picture = "res/images/user.svg", $admin = 0)
@@ -215,5 +216,15 @@ class User
     public function setFavorites($favorites)
     {
         $this->favorites = $favorites;
+    }
+
+    public function getScore()
+    {
+        return $this->score;
+    }
+
+    public function setScore($score)
+    {
+        $this->score = $score;
     }
 }

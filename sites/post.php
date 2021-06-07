@@ -2,9 +2,20 @@
     include_once $_SESSION["path"] . "/backend/utility/DB.php";
     $db = new DB();
     $post = $db->getAdById(intval($_REQUEST["id"]));
+    $id = $post->getId();
+    $category = $post->getCategory();
 
-    $images = [
-    "/res/images/car.jpg",  "/res/images/car.jpg", "/res/images/car2.jpeg", "/res/images/baguette.png"];
+    //$images = ["/res/images/car.jpg",  "/res/images/car.jpg", "/res/images/car2.jpeg", "/res/images/baguette.png"];
+
+    $images = scandir($_SESSION["path"]."/pictures/Adds/$id/full/");
+    $images = array_filter($images, function($el){
+        return $el != "." && $el != "..";
+    });
+    // $images = array_map(function($el) use ($id){
+    //     return "/pictures/Adds/$id/full/".$el;
+    // }, $images);
+    // var_dump($images);
+    // die;
     function cropThumbnail ($image) {
         $root = $_SESSION["path"] . "/";
         $filepath = pathinfo($image);
@@ -66,6 +77,7 @@
 ?>
 <section class="container">
 <div class="row d-flex">
+    <h5 class="container row mb-2"><?= $category?$category["name"]:"" ?></h5>
     <h1 class="mr-auto"><?= $post->getTitle() ?></h1>
 
     <?php if (isset($user)) : ?>
@@ -89,13 +101,13 @@
                             $limage = "/res/images/No-Image-Found.png";
                         }
                     ?>
-                    <a href="<?=$limage?>" data-lightbox="roadtrip"><img class = "col-12" src="<?= $limage?>" ></a>
+                    <a href="<?="/pictures/Adds/$id/full/".$limage?>" data-lightbox="roadtrip"><img class = "col-12" src="<?="/pictures/Adds/$id/half/".$limage?>" ></a>
                 </div>
                 <div class="row col-12 mt-2 ">
                     <?php if (count($images)) : ?>
                         <?php foreach($images as $image): ?>
-                            <a class = "col-3 p-0" href="<?=$image?>" data-lightbox="roadtrip">
-                                <img class = "col-12 p-1" src = "<?=cropThumbnail($image)?>" >
+                            <a class = "col-3 p-0" href="<?="/pictures/Adds/$id/full/".$image?>" data-lightbox="roadtrip">
+                                <img class = "col-12 p-1" src = "<?="/pictures/Adds/$id/thumbnail/".$image?>" >
                             </a>
                         <?php endforeach;?>
                     <?php endif; ?>
@@ -103,13 +115,31 @@
             </div>
             <div class="col-4 price px-0">
                 <div class="row">  
-                <div class="col-12 text-center"  style = "font-size: larger; font-weight: 600; background-color: yellow; padding: 15px; margin-top: 20px;"> $<?= $post->getPrice()?> </div>
+                <div class="col-12 text-center"  style = "font-size: larger; font-weight: 600; background-color: yellow; padding: 15px; margin-top: 20px;"><?= $post->getPrice()?>€ </div>
             </div>
             <div class="row"> 
                 <a href="#" class="button btn-primary p-2 my-2 col-12 text-center">Chat</a>
             </div>
             <div class="row"> 
-                <div><?= $post->getUser()->getFname() ?> <?= $post->getUser()->getLname() ?></div>
+                <div class="container"><div class="row"><?= $post->getUser()->getFname() ?> <?= $post->getUser()->getLname() ?></div>
+                <div class="row"><?= $post->getUser()->getAddress() ?></div>
+                <div class="row">
+                <div class="score">
+                <?= sprintf("%01.2f", $post->getUser()->getScore());?>
+                </div>
+                <div class="score_star">
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <?php $tmp = $post->getUser()->getScore() - $i;?>
+                    <?php if ($tmp >= 0): ?>
+                        <i class="fas fa-star"></i>
+                    <?php elseif ($tmp > -1): ?>
+                        <i class="fas fa-star-half-alt"></i>
+                    <?php else: ?>
+                        <i class="far fa-star"></i>
+                    <?php endif; ?>
+                <?php endfor; ?>
+                </div>
+                </div></div>
             </div>
             </div>
         </div>

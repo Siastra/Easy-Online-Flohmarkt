@@ -182,8 +182,16 @@ class DB
             if (empty($row)) {
                 return null;
             } else {
-                return new User($row["id"], $row["title"], $row["fname"], $row["lname"],
+                $stmt = $this->conn->prepare("SELECT AVG(score) AS score FROM `comment` WHERE user_id = ? GROUP BY user_id");
+                $row["score"] = 0;
+                if ($stmt->execute([$id])) {
+                    $row_score = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $row["score"] = $row_score["score"];
+                }
+                $user = new User($row["id"], $row["title"], $row["fname"], $row["lname"],
                     $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"]);
+                    $user->setScore($row["score"]);
+                    return $user;
             }
         }
         return null;
@@ -342,5 +350,18 @@ class DB
             }
         }
         return $result;
+    }
+
+    public function getPostCategory($post_id){
+        $q = $this->conn->prepare("select * from is_assigned where advert_id = :advert_id");
+        $q->execute([":advert_id" => $post_id]);
+        $f = $q->fetch(PDO::FETCH_ASSOC);
+        if ($f){
+            $category_id = $f["category_id"];
+            $q = $this->conn->prepare("select * from categories where id = :id");
+            $q->execute([":id" => $category_id]);
+            $f = $q->fetch(PDO::FETCH_ASSOC);
+        }
+        return $f;
     }
 }
