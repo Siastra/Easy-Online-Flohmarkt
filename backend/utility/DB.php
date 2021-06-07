@@ -183,15 +183,15 @@ class DB
                 return null;
             } else {
                 $stmt = $this->conn->prepare("SELECT AVG(score) AS score FROM `comment` WHERE user_id = ? GROUP BY user_id");
-                $row["score"] = 0;
                 if ($stmt->execute([$id])) {
                     $row_score = $stmt->fetch(PDO::FETCH_ASSOC);
-                    $row["score"] = $row_score["score"];
-                }
-                $user = new User($row["id"], $row["title"], $row["fname"], $row["lname"],
-                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"]);
-                    $user->setScore($row["score"]);
+                    $user = new User($row["id"], $row["title"], $row["fname"], $row["lname"],
+                        $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"]);
+                    if ($row_score)
+                        $user->setScore($row_score["score"]);
                     return $user;
+                }
+
             }
         }
         return null;
