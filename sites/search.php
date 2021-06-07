@@ -22,7 +22,7 @@ $tags = $db->getAllCategories();
     <form action="index.php?section=search" type="GET">
         <label for="category">Categories:</label><br>
         <?php foreach ($tags as $tag) :?>
-        <button type="submit" value="<?= $tag?>" name="category"/><?= $tag?></button>
+        <button type="submit" value="<?= $tag['name']?>" name="category"/><?= $tag['name']?></button>
         <?php endforeach; ?>
     </form>
 </div>
