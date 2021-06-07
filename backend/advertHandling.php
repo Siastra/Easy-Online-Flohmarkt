@@ -15,6 +15,7 @@ $id=$user->getId();
             Upload::uploadPost($_FILES, $pic["name"][$i],$id,$i,$advId);
 
         }
+        $db->assignCategories($advId,$_REQUEST["categories"]);
         header("Location: ../index.php?section=dashboard");
     }else {
         header("Location: ../index.php?section=upload");

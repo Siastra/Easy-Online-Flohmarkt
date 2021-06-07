@@ -322,14 +322,25 @@ class DB
         $sql = $this->conn->prepare("SELECT * FROM `categories`");
         $sql->execute();
         $categories = $sql->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($categories)){
-            foreach ($categories as $category){
-                array_push($result, $category["name"]);
+
+
+        return $categories;
+    }
+    public function assignCategories($advertId,$categoryId):bool{
+        $stmt = $this->conn->prepare("INSERT INTO `is_assigned` (`advert_id`, `category_id`) 
+                     VALUES (?, ?);");
+        try {
+            $stmt->execute([$advertId,$categoryId]);
+            return true;
+        } catch (PDOException $e) {
+            $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
+            if (strpos($e->getMessage(), $existingkey) !== FALSE) { // duplicate username
+                return false;
+            } else {
+                throw $e;
             }
         }
-        return $result;
     }
-
     public function getAdvByCategory(string $searchText):array{
         $result = array();
         $searchText="%".$searchText."%";
