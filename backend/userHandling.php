@@ -2,8 +2,20 @@
 session_start();
 include_once $_SESSION["path"] . '/backend/utility/DB.php';
 include_once $_SESSION["path"] . '/backend/utility/create.php';
+include_once $_SESSION["path"] . '/backend/utility/Email.php';
 
 $db = new DB();
+
+function generateRandomString($length = 10): string
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
 
 if ($_REQUEST["type"] == "insert") {
     $user = new User(1, $_REQUEST["title"], $_REQUEST["fname"], $_REQUEST["lname"],
@@ -65,4 +77,21 @@ if ($_REQUEST["type"] == "insert") {
     } else {
         header("Location: ../index.php?section=register&edit=true&update=fail");
     }
+}elseif ($_REQUEST["type"] == "forgotPassword") {
+
+    $newPw = generateRandomString();
+    $user = $db->getUser($_REQUEST["username"]);
+    if ($user != NULL) {
+        $user->setPassword($newPw);
+        if ($db->updatePassword($user)) {
+            Email::sendNewPw($user);
+            header("Location: ../index.php?success=updatePassword");
+        } else {
+            header("Location: ../index.php?section=forgotPw&fail=updatePasswordFailed");
+        }
+    } else {
+        header("Location: ../index.php?section=forgotPw&fail=userNotFound");
+    }
+
+
 }

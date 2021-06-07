@@ -92,3 +92,12 @@ ALTER TABLE `is_assigned`
  foreign key (`user_id`) references users(`id`),
  CHECK ( `score` between 1 and 5)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+INSERT INTO `categories` (`id`, `name`) VALUES (1, 'Technik');
+INSERT INTO `categories` (`id`, `name`) VALUES (2, 'Wohnen & Haushalt');
+INSERT INTO `categories` (`id`, `name`) VALUES (3, 'Auto & Motor');
+INSERT INTO `categories` (`id`, `name`) VALUES (4, 'Haus & Garten');
+INSERT INTO `categories` (`id`, `name`) VALUES (5, 'Kleidung');
+INSERT INTO `categories` (`id`, `name`) VALUES (6, 'Spielzeug');
+INSERT INTO `categories` (`id`, `name`) VALUES (7, 'Bücher & Filme');
+INSERT INTO `categories` (`id`, `name`) VALUES (8, 'Freizeit');
