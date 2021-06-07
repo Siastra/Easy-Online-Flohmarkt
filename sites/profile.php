@@ -35,17 +35,18 @@ $ads = $db->getAdsByUser($user->getId());
                 echo '<div class="galleryRow row">';
             }
 
-            echo '<div class="galleryItem">
-                    <div class="row itemHeader">
+            echo '<div class="galleryItem row">
+                        <a class="col-3" href="index.php?section=post&id=' . ($ads[$i]->getId()) . '"><img alt="' . $ads[$i]->getTitle() .
+                '" src="' . $ads[$i]->getPicture() . '" class="adPic"></a>
                         <div class="col">
-                            <button class="btn btn-danger float-right" onclick="deletePost(' .
-                                ($ads[$i]->getId()) . ')">X</button>
+                            <b style="text-align: left">' . ($ads[$i]->getTitle()) . '</b>
+                            <p style="text-align: left">' . ($ads[$i]->getPrice()) . '€</p>
                         </div>
-                    </div>
-                    <div class="row">
-                        <a class="col" href="index.php?section=post&id=' . ($ads[$i]->getId()) . '"><img alt="' . $ads[$i]->getTitle() .
-                '" src="' . $ads[$i]->getPicture() . '"></a>
-                    </div>
+                
+                    <button class="btn btn-warning" onclick="deletePost(' .
+                ($ads[$i]->getId()) . ')">Edit</button>
+                        <button class="btn btn-danger" onclick="deletePost(' .
+                ($ads[$i]->getId()) . ')">X</button>
                 </div>';
             if (($i == (sizeof($ads)-1)) && (sizeof($ads) % 6) != 0) {
                 echo '</div>';
