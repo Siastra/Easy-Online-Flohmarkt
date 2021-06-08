@@ -3,12 +3,21 @@ include_once $_SESSION["path"] . '/backend/utility/DB.php';
 include_once $_SESSION["path"] . '/backend/utility/MsgFactory.php';
 $db = new DB();
 $categories = $db->getAllCategories();
+$edit = 0;
+if(isset($_GET["edit"])){
+    $edit = $_GET["edit"];
+    var_dump($edit);
+    $ad = $db->getAdById($_GET["edit"]);
+}
 ?>
 
 <script>
     $(document).ready(function () {
         let x = document.getElementsByTagName("TITLE")[0];
         x.innerHTML = "Upload Post";
+        document.getElementById("title").value = "<?php echo (isset($ad) ? $ad->getTitle() : ''); ?>";
+        document.getElementById("price").value = "<?php echo (isset($ad) ? $ad->getPrice() : ''); ?>";
+        document.getElementById("description").value = "<?php echo (isset($ad) ? $ad->getDescription() : ''); ?>";
     });
 
 </script>
@@ -18,6 +27,7 @@ $categories = $db->getAllCategories();
     <form method="post" action="backend/advertHandling.php" enctype="multipart/form-data">
         <div class="row">
             <div class="col">
+                <input type="hidden" name="type" value="<?php echo (($edit) ? $edit : 'insert'); ?>">
                 <div class="row">
                     <div class="col form-group">
                         <label for="picture">Post image</label><br><br>

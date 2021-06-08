@@ -8,17 +8,25 @@ $id=$user->getId();
 $advertisement = new Advert(1, $_REQUEST["title"], $_REQUEST["price"] ,$user, new DateTime(),$_REQUEST["description"]);
 $pic=$_FILES["picture"];
 $id=$user->getId();
+//$_POST["type"] = "insert";
 
+if($_REQUEST["type"] == "insert"){
     if ($db->createAdv($advertisement)) {
         $advId=$db->getLatestAdvId();
-        for($i=0;$i<sizeof($pic["name"]);$i++){
+        for($i=0; $i<sizeof($pic["name"]); $i++){
             Upload::uploadPost($_FILES, $pic["name"][$i],$id,$i,$advId);
-
         }
         $db->assignCategories($advId,$_REQUEST["categories"]);
         header("Location: ../index.php?section=dashboard");
     }else {
         header("Location: ../index.php?section=upload");
+    }
+}else{
+    $ad = $db->getAdById($_REQUEST["type"]);
+    $title = (isset($_REQUEST["title"]) ?  $_REQUEST["title"] : $ad->getTitle());
+    $price = (isset($_REQUEST["price"]) ?  $_REQUEST["price"] : $ad->getPrice());
+    $description = (isset($_REQUEST["description"]) ?  $_REQUEST["description"] : $ad->getDescription());
+    $db->editAdv($_REQUEST["type"], $title, $price, $description);
+    header("Location: ../index.php?section=dashboard");
 }
-
 ?>
