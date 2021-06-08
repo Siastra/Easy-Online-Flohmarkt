@@ -6,7 +6,6 @@ $categories = $db->getAllCategories();
 $edit = 0;
 if(isset($_GET["edit"])){
     $edit = $_GET["edit"];
-    var_dump($edit);
     $ad = $db->getAdById($_GET["edit"]);
 }
 ?>
@@ -18,6 +17,7 @@ if(isset($_GET["edit"])){
         document.getElementById("title").value = "<?php echo (isset($ad) ? $ad->getTitle() : ''); ?>";
         document.getElementById("price").value = "<?php echo (isset($ad) ? $ad->getPrice() : ''); ?>";
         document.getElementById("description").value = "<?php echo (isset($ad) ? $ad->getDescription() : ''); ?>";
+        <?php echo (isset($ad) ?  'document.getElementById("'.$ad->getCategory()["id"].'").checked = true;' : ''); ?>
     });
 
 </script>

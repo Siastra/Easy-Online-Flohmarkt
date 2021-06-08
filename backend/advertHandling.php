@@ -8,7 +8,6 @@ $id=$user->getId();
 $advertisement = new Advert(1, $_REQUEST["title"], $_REQUEST["price"] ,$user, new DateTime(),$_REQUEST["description"]);
 $pic=$_FILES["picture"];
 $id=$user->getId();
-//$_POST["type"] = "insert";
 
 if($_REQUEST["type"] == "insert"){
     if ($db->createAdv($advertisement)) {

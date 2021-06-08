@@ -69,6 +69,6 @@ $ads = $db->getAdsByUser($user->getId());
     }
     function editPost(id) {
         var url = "index.php?section=create&edit=" + id;
-        window.open(url)
+        window.open(url, '_self')
     }
 </script>
