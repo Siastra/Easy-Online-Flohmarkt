@@ -141,8 +141,8 @@ class DB
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $favorites[] = $row["advert_id"];
             }
-            }
-            return $favorites;
+        }
+        return $favorites;
     }
 
     public function getFavoritesAdverts($user_id)
@@ -151,11 +151,11 @@ class DB
         $stmt = $this->conn->prepare("SELECT * FROM `adverts` WHERE id in (SELECT advert_id FROM favorite WHERE user_id = ?)");
         if ($stmt->execute([$user_id])) {
             while ($post = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        array_push($favorites, new Advert($post["id"], $post["title"], $post["price"],
-                            $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+                array_push($favorites, new Advert($post["id"], $post["title"], $post["price"],
+                    $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
             }
-            }
-            return $favorites;
+        }
+        return $favorites;
     }
 
     //Updates password in the DB.
@@ -293,16 +293,19 @@ class DB
         return $result;
     }
 
-    public function getLatestAdvId():int{
+    public function getLatestAdvId(): int
+    {
         $sql1 = $this->conn->prepare("SELECT MAX(id) FROM `adverts`");
         $sql1->execute();
         $advId = $sql1->fetch(PDO::FETCH_ASSOC);
         return (($advId["MAX(id)"]) ? $advId["MAX(id)"] : 0);
     }
+
     //get AdvId by Text
-    public function getAdvByText(string $searchText):array{
+    public function getAdvByText(string $searchText): array
+    {
         $result = array();
-        $searchText="%".$searchText."%";
+        $searchText = "%" . $searchText . "%";
         $sql = $this->conn->prepare("SELECT * FROM `adverts` WHERE `text` LIKE  ? ");
         $sql->execute([$searchText]);
         $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -316,6 +319,7 @@ class DB
 
 
     }
+
     public function getAllCategories(): array
     {
         $result = array();
@@ -326,11 +330,13 @@ class DB
 
         return $categories;
     }
-    public function assignCategories($advertId,$categoryId):bool{
+
+    public function assignCategories($advertId, $categoryId): bool
+    {
         $stmt = $this->conn->prepare("INSERT INTO `is_assigned` (`advert_id`, `category_id`) 
                      VALUES (?, ?);");
         try {
-            $stmt->execute([$advertId,$categoryId]);
+            $stmt->execute([$advertId, $categoryId]);
             return true;
         } catch (PDOException $e) {
             $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
@@ -341,9 +347,11 @@ class DB
             }
         }
     }
-    public function getAdvByCategory(string $searchText):array{
+
+    public function getAdvByCategory(string $searchText): array
+    {
         $result = array();
-        $searchText="%".$searchText."%";
+        $searchText = "%" . $searchText . "%";
         $sql1 = $this->conn->prepare("SELECT `id` FROM `categories` WHERE `name` LIKE ?");
         $sql1->execute([$searchText]);
         $tags = $sql1->fetchAll(PDO::FETCH_ASSOC);
@@ -352,7 +360,7 @@ class DB
                 $sql2 = $this->conn->prepare("SELECT `advert_id` FROM `is_assigned` WHERE `category_id` = ?");
                 $sql2->execute([$tag["id"]]);
                 $adverts = $sql2->fetchAll(PDO::FETCH_ASSOC);
-                if(!empty($adverts)) {
+                if (!empty($adverts)) {
                     foreach ($adverts as $advert) {
                         array_push($result, $this->getAdById($advert["advert_id"]));
 
@@ -363,11 +371,12 @@ class DB
         return $result;
     }
 
-    public function getPostCategory($post_id){
+    public function getPostCategory($post_id)
+    {
         $q = $this->conn->prepare("select * from is_assigned where advert_id = :advert_id");
         $q->execute([":advert_id" => $post_id]);
         $f = $q->fetch(PDO::FETCH_ASSOC);
-        if ($f){
+        if ($f) {
             $category_id = $f["category_id"];
             $q = $this->conn->prepare("select * from categories where id = :id");
             $q->execute([":id" => $category_id]);
@@ -395,7 +404,7 @@ class DB
         rmdir($dirPath);
     }
 
-    public function deletePostById(int $id) : bool
+    public function deletePostById(int $id): bool
     {
         try {
             self::deleteDir($_SESSION["path"] . "/pictures/Adds/$id");
@@ -406,9 +415,89 @@ class DB
             $sql = $this->conn->prepare("DELETE FROM `adverts` WHERE `id`=?");
             $sql->execute([$id]);
             return true;
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             var_dump($e);
             return false;
+        }
+
+    }
+
+    public function getAdvSorted(string $searchterm): array
+    {
+        $result = array();
+        switch ($searchterm) {
+            case 'DateUp':
+                $sql = $this->conn->prepare("SELECT * FROM `adverts` ORDER BY `adverts`.`createdAt` DESC");
+                $sql->execute();
+                $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
+                if (!empty($posts)) {
+                    foreach ($posts as $post) {
+                        array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                            $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+                    }
+                }
+                return $result;
+
+            case 'DateDown':
+                $sql = $this->conn->prepare("SELECT * FROM `adverts` ORDER BY `adverts`.`createdAt` ASC");
+                $sql->execute();
+                $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
+                if (!empty($posts)) {
+                    foreach ($posts as $post) {
+                        array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                            $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+                    }
+                }
+                return $result;
+            case 'PriceUp':
+                $sql = $this->conn->prepare("SELECT * FROM `adverts` ORDER BY `adverts`.`price` ASC");
+                $sql->execute();
+                $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
+                if (!empty($posts)) {
+                    foreach ($posts as $post) {
+                        array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                            $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+                    }
+                }
+                return $result;
+            case 'PriceDown':
+                $sql = $this->conn->prepare("SELECT * FROM `adverts` ORDER BY `adverts`.`price` DESC");
+                $sql->execute();
+                $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
+                if (!empty($posts)) {
+                    foreach ($posts as $post) {
+                        array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                            $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+                    }
+                }
+                return $result;
+            case 'NameUp':
+                $sql = $this->conn->prepare("SELECT * FROM `adverts` ORDER BY `adverts`.`title` ASC");
+                $sql->execute();
+                $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
+                if (!empty($posts)) {
+                    foreach ($posts as $post) {
+                        array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                            $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+                    }
+                }
+                return $result;
+            case 'NameDown':
+                $sql = $this->conn->prepare("SELECT * FROM `adverts` ORDER BY `adverts`.`title` DESC");
+                $sql->execute();
+                $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
+                if (!empty($posts)) {
+                    foreach ($posts as $post) {
+                        array_push($result, new Advert($post["id"], $post["title"], $post["price"],
+                            $this->getUserById(intval($post["user_id"])), new DateTime($post["createdAt"]), $post["text"]));
+                    }
+                }
+                return $result;
+
+            default:
+                break;
+
+
         }
 
     }
