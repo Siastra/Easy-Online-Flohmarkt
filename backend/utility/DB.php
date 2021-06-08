@@ -501,4 +501,20 @@ class DB
         }
 
     }
+
+    public function editAdv($id, $title, $price, $text) : bool
+    {
+        $stmt = $this->conn->prepare("UPDATE `adverts` SET `title` = ?, `price` = ?, `text` = ? WHERE `id` = ?;");
+        try {
+            $stmt->execute([$title, $price, $text, $id]);
+            return true;
+        } catch (PDOException $e) {
+            $existingkey = "Integrity constraint violation: 1062 Duplicate entry";
+            if (strpos($e->getMessage(), $existingkey) !== FALSE) { // duplicate username
+                return false;
+            } else {
+                throw $e;
+            }
+        }
+   }
 }

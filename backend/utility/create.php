@@ -4,7 +4,7 @@
 class Upload
 {
 
-    public static function uploadPost(array $files, string $fileNewName,int $id,int $i,int $advId): bool
+    public static function uploadPost(array $files, string $fileNewName,int $i,int $digit,int $advId): bool
     {
         if(!is_dir($_SESSION["path"] .'/pictures')){
             mkdir($_SESSION["path"] . '/pictures');
@@ -31,7 +31,7 @@ class Upload
         $fullPathThumb = $tmpPath . "/thumbnail/";
         $fullPath = $tmpPath . "/full/";
         $ext = pathinfo($files['picture']['name'][$i], PATHINFO_EXTENSION);
-        $fileNewName=$i.".".$ext;
+        $fileNewName=$i+$digit.".".$ext;
         $imageType = $sourceProperties[2];
 
 
