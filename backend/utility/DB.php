@@ -333,6 +333,13 @@ class DB
 
     public function assignCategories($advertId, $categoryId): bool
     {
+        var_dump($categoryId);
+        $stmt = $this->conn->prepare("SELECT * FROM `is_assigned` WHERE `advert_id`=?");
+        if($stmt->execute([$advertId])){
+            $stmt2= $this->conn->prepare("DELETE FROM `is_assigned` WHERE `advert_id`=?");
+            $stmt2->execute([$advertId]);
+        }
+
         $stmt = $this->conn->prepare("INSERT INTO `is_assigned` (`advert_id`, `category_id`) 
                      VALUES (?, ?);");
         try {

@@ -36,6 +36,7 @@ if($_REQUEST["type"] == "insert"){
             Upload::uploadPost($_FILES, $pic["name"][$i],$i,sizeof($latestPic) - 2,$_REQUEST["type"]);
         }
     }
+    $db->assignCategories($ad->getId(),intval($_REQUEST["categories"]));
     header("Location: ../index.php?section=dashboard");
 }
 ?>
