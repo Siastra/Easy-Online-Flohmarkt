@@ -43,8 +43,7 @@ $ads = $db->getAdsByUser($user->getId());
                             <p style="text-align: left">' . ($ads[$i]->getPrice()) . '€</p>
                         </div>
                 
-                    <button class="btn btn-warning" onclick="deletePost(' .
-                ($ads[$i]->getId()) . ')">Edit</button>
+                    <button class="btn btn-warning">Edit</button>
                         <button class="btn btn-danger" onclick="deletePost(' .
                 ($ads[$i]->getId()) . ')">X</button>
                 </div>';
@@ -62,11 +61,10 @@ $ads = $db->getAdsByUser($user->getId());
             type: "POST",
             url: 'ajax/deletePost.php',
             data:{id: id},
-        }).then(
-            function() {
+            success: function (message) {
                 location.reload();
             }
-        );
+        });
 
     }
 </script>

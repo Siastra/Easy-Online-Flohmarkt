@@ -375,4 +375,41 @@ class DB
         }
         return $f;
     }
+
+    public static function deleteDir($dirPath)
+    {
+        if (!is_dir($dirPath)) {
+            throw new InvalidArgumentException("$dirPath must be a directory");
+        }
+        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+            $dirPath .= '/';
+        }
+        $files = glob($dirPath . '*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                self::deleteDir($file);
+            } else {
+                unlink($file);
+            }
+        }
+        rmdir($dirPath);
+    }
+
+    public function deletePostById(int $id) : bool
+    {
+        try {
+            self::deleteDir($_SESSION["path"] . "/pictures/Adds/$id");
+            $sql = $this->conn->prepare("DELETE FROM `favorite` WHERE `advert_id`=?");
+            $sql->execute([$id]);
+            $sql = $this->conn->prepare("DELETE FROM `is_assigned` WHERE `advert_id`=?");
+            $sql->execute([$id]);
+            $sql = $this->conn->prepare("DELETE FROM `adverts` WHERE `id`=?");
+            $sql->execute([$id]);
+            return true;
+        }catch (Exception $e) {
+            var_dump($e);
+            return false;
+        }
+
+    }
 }

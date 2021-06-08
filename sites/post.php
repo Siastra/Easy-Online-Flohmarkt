@@ -37,14 +37,14 @@
                         }
                     ?>
                     <a href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/".$limage?>" data-lightbox="roadtrip">
-                        <img class = "col-12" src="<?=$_SESSION["relPath"]."/pictures/Adds/$id/half/".$limage?>" >
+                        <img class = "col-12" alt="<?=$limage?>" src="<?=$_SESSION["relPath"]."/pictures/Adds/$id/half/".$limage?>" >
                     </a>
                 </div>
                 <div class="row col-12 mt-2 ">
                     <?php if (count($images)) : ?>
                         <?php foreach($images as $image): ?>
                             <a class = "col-3 p-0" href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/".$image?>" data-lightbox="roadtrip">
-                                <img class = "col-12 p-1" src = "<?=$_SESSION["relPath"]."/pictures/Adds/$id/thumbnail/".$image?>" >
+                                <img class = "col-12 p-1" alt="<?=$image?>" src = "<?=$_SESSION["relPath"]."/pictures/Adds/$id/thumbnail/".$image?>" >
                             </a>
                         <?php endforeach;?>
                     <?php endif; ?>
