@@ -26,12 +26,15 @@ if($_REQUEST["type"] == "insert"){
     $price = (isset($_REQUEST["price"]) ?  $_REQUEST["price"] : $ad->getPrice());
     $description = (isset($_REQUEST["description"]) ?  $_REQUEST["description"] : $ad->getDescription());
     $db->editAdv($_REQUEST["type"], $title, $price, $description);
-    $dir = $_SESSION["path"] . "/pictures/Adds/" . $_REQUEST["type"] . "/full";
-    $latestPic = scandir($dir);
-    $start = sizeof($latestPic) - 2;
-    for($i=0; $i<sizeof($pic["name"]); $i++){
-        $start++;
-        Upload::uploadPost($_FILES, $pic["name"][$i],$i,sizeof($latestPic) - 2,$_REQUEST["type"]);
+    //var_dump($_FILES["picture"]);
+    if($_FILES["picture"]["size"][0] > 0){
+        $dir = $_SESSION["path"] . "/pictures/Adds/" . $_REQUEST["type"] . "/full";
+        $latestPic = scandir($dir);
+        $start = sizeof($latestPic) - 2;
+        for($i=0; $i<sizeof($pic["name"]); $i++){
+            $start++;
+            Upload::uploadPost($_FILES, $pic["name"][$i],$i,sizeof($latestPic) - 2,$_REQUEST["type"]);
+        }
     }
     header("Location: ../index.php?section=dashboard");
 }
