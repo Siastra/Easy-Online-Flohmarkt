@@ -535,4 +535,16 @@ class DB
                 throw $e;
         }
    }
+
+   public function getCommentsByUser($user_id)
+   {
+        $stmt = $this->conn->prepare("SELECT * FROM `comment` WHERE user_id = ?");
+        try {
+            $stmt->execute([$user_id]);
+            $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $comments;
+        } catch (PDOException $e) {
+                throw $e;
+        }
+   }
 }
