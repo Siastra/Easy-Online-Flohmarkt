@@ -76,6 +76,7 @@
                     <?php endif; ?>
                 <?php endfor; ?>
                 </div>
+                <a href="#">See comments</a>
                 </div></div>
             </div>
             </div>
@@ -88,6 +89,31 @@
         </div>
     </div>
 </section>
+<form action="">
+<i id="1" class="fas fa-star js-score"></i>
+<i id="2" class="far fa-star js-score"></i>
+<i id="3" class="far fa-star js-score"></i>
+<i id="4" class="far fa-star js-score"></i>
+<i id="5" class="far fa-star js-score"></i>
+<input type="hidden" id="score" value="1">
+<br>
+<textarea name="comment" id="comment" cols="60" rows="3"></textarea>
+<br>
+<a href="#" id="js-submit" class="button btn btn-primary">Save</a>
+<?php //for() :?>
+<div class = "row">
+<div class = "col-1">
+<img src="/res/images/user.svg" style="width: 150px">
+</div>
+<div class = "col-11">
+<div class = "row">
+</div>
+<div class = "row">
+</div>
+</div>
+</div>
+    <?php //endfor;?>
+</form>
 <script>
     lightbox.option({
       'resizeDuration': 200,
@@ -95,6 +121,51 @@
     })
     $(document).ready(function(){
         console.log("jquery is working");
+        $(".js-score").on("mouseenter", function(e){
+            let score = parseInt(this.id);
+            //console.log(score);
+            let score_stars = $(".js-score");
+            //console.log(score_stars);
+            score_stars.map(function(i, el){
+                //console.log(el);
+                if(parseInt(el.id) <= score){
+                    el.classList.add("fas");
+                    el.classList.remove("far");
+                }
+            });
+        });
+        $(".js-score").on("click", function(e){
+            let hidden_score = $("#score");
+            hidden_score.val(this.id);
+        });
+        $("#js-submit").on("click", function(e){
+            e.preventDefault();
+            let hidden_score = $("#score");
+            let comment = $("#comment");
+            $.post("/post_comment.php", {
+                score : hidden_score.val(), 
+                comment : comment.val(),
+                user_id : <?= $post->getUser()->getId() ?>,
+                author_id : <?= $user->getId() ?>
+            })
+        });
+        $(".js-score").on("mouseleave", function(e){
+            let hidden_score = $("#score");
+            let score_stars = $(".js-score");
+            console.log(hidden_score.val());
+            score_stars.map(function(i, el){
+                //console.log(el);
+                if(parseInt(el.id) <= parseInt(hidden_score.val())){
+                    el.classList.add("fas");
+                    el.classList.remove("far");
+                } else {
+                    el.classList.add("far");
+                    el.classList.remove("fas");
+                }
+            });
+            //this.classList.add("far");
+            //this.classList.remove("fas");
+        })
         $("#js-favorite").click(function(e){
             e.preventDefault()
             $.get("<?php echo $_SESSION["relPath"] ?>/favorite.php", {

@@ -524,4 +524,15 @@ class DB
             }
         }
    }
+
+   public function saveComment($author_id, $user_id, $score, $comment)
+   {
+        $stmt = $this->conn->prepare("INSERT INTO `comment` (author_id, user_id, score, comment) VALUES (?,?,?,?)");
+        try {
+            $stmt->execute([$author_id, $user_id, $score, $comment]);
+            return true;
+        } catch (PDOException $e) {
+                throw $e;
+        }
+   }
 }
