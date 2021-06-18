@@ -127,3 +127,13 @@ body {
         height: 100px;
     }
 }
+
+.modal_form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -20%;
+    background-color: white;
+    padding: 15px;
+    border: 2px solid grey;
+}
