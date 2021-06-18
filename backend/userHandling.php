@@ -19,11 +19,11 @@ function generateRandomString($length = 10): string
 
 if ($_REQUEST["type"] == "insert") {
     $user = new User(1, $_REQUEST["title"], $_REQUEST["fname"], $_REQUEST["lname"],
-        $_REQUEST["address"], $_REQUEST["plz"], $_REQUEST["city"], $_REQUEST["email"], $_REQUEST["pw"], );
+        $_REQUEST["address"], $_REQUEST["plz"], $_REQUEST["city"], $_REQUEST["email"], $_REQUEST["pw"],);
     if ($db->registerUser($user)) {
         $user = $db->getUser($_REQUEST["email"]);
         if ($_FILES["picture"]["size"])
-        $path = Upload::uploadProfilePicture($_FILES, $user->getId());
+            $path = Upload::uploadProfilePicture($_FILES, $user->getId());
         if (strlen($path) > 1) {
             $db->updateProfilePic($user->getId(), $path);
         }
@@ -49,7 +49,7 @@ if ($_REQUEST["type"] == "insert") {
     $_SESSION = array();
     session_destroy();
     header("Location: ../index.php?logout=success");
-}else if ($_REQUEST["type"] == "updatePw") {
+} else if ($_REQUEST["type"] == "updatePw") {
     if ($db->loginUser($_SESSION["email"], $_REQUEST["oldPw"])) {
         $newPw = $_REQUEST["pw"];
         $user = $db->getUser($_SESSION["email"]);
@@ -77,7 +77,7 @@ if ($_REQUEST["type"] == "insert") {
     } else {
         header("Location: ../index.php?section=register&edit=true&update=fail");
     }
-}elseif ($_REQUEST["type"] == "forgotPassword") {
+} elseif ($_REQUEST["type"] == "forgotPassword") {
 
     $newPw = generateRandomString();
     $user = $db->getUser($_REQUEST["username"]);
@@ -85,13 +85,18 @@ if ($_REQUEST["type"] == "insert") {
         $user->setPassword($newPw);
         if ($db->updatePassword($user)) {
             Email::sendNewPw($user);
-            header("Location: ../index.php?success=updatePassword");
+            header("Location: ../index.php?resetPassword=success");
         } else {
-            header("Location: ../index.php?section=forgotPw&fail=updatePasswordFailed");
+            header("Location: ../index.php?section=forgotPw&resetPassword=fail");
         }
     } else {
-        header("Location: ../index.php?section=forgotPw&fail=userNotFound");
+        header("Location: ../index.php?section=forgotPw&resetPassword=userNotFound");
     }
-
-
+} elseif ($_REQUEST["type"] == "deleteUser") {
+    $userId = intval($_REQUEST["id"]);
+    if ($db->deleteUserById($userId)) {
+        header("Location: ../index.php?deleteUser=success");
+    } else {
+        header("Location: ../index.php?deleteUser=fail");
+    }
 }

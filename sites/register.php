@@ -158,6 +158,8 @@ if ($edit) {
                                 <div class="col"></div>
                             </div>' .
             $passwordInput . '<button type="submit" class="btn btn-success submit pwSubmit" disabled>Submit</button></form>';
+            echo '<h1>Delete user account</h1><hr><br><a type="button" style="color: red;margin-bottom: 5%" href="' . $_SESSION["relPath"] . '/backend/userHandling.php?type=deleteUser&id='
+                . $user->getId() . '">Delete account permanently</a>';
         }
     ?>
 </section>

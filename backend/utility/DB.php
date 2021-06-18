@@ -429,6 +429,22 @@ class DB
 
     }
 
+    public function deleteUserById(int $id): bool
+    {
+        try {
+            $posts = $this->getAdsByUser($id);
+            foreach ($posts as $post) {
+                $this->deletePostById($post->getId());
+            }
+            $sql = $this->conn->prepare("DELETE FROM `users` WHERE `id`=?");
+            $sql->execute([$id]);
+            return true;
+        } catch (Exception $e) {
+            var_dump($e);
+            return false;
+        }
+    }
+
     public function getAdvSorted(string $searchterm): array
     {
         $result = array();

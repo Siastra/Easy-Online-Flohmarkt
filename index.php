@@ -61,6 +61,20 @@
         } else if ($_GET["updatePassword"] == "wrongPassword") {
             echo MsgFactory::getWarning("<b>Password Update failed!</b> Looks like you have entered your password wrong!");
         }
+    }else if (isset($_GET["resetPassword"])) {
+        if ($_GET["resetPassword"] == "success") {
+            echo MsgFactory::getSuccess("<b>Password Reset successful!</b> Your new password has been sent to your email!");
+        } else if ($_GET["resetPassword"] == "fail") {
+            echo MsgFactory::getWarning("<b>Password Reset failed!</b> Looks like something went wrong while resetting your password");
+        } else if ($_GET["resetPassword"] == "userNotFound") {
+            echo MsgFactory::getWarning("<b>Password Reset failed!</b> Looks like your entered user does not exist!");
+        }
+    } else if (isset($_GET["deleteUser"])) {
+        if ($_GET["deleteUser"] == "success") {
+            echo MsgFactory::getSuccess("<b>User account deleted successfully!</b>");
+        } else if ($_GET["deleteUser"] == "fail") {
+            echo MsgFactory::getWarning("<b>User account deletion failed!</b>");
+        }
     }
     ?>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
