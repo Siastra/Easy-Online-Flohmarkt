@@ -554,7 +554,7 @@ class DB
 
    public function getCommentsByUser($user_id)
    {
-        $stmt = $this->conn->prepare("SELECT * FROM `comment` WHERE user_id = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM `comment` WHERE user_id = ? ORDER BY created_at DESC");
         try {
             $stmt->execute([$user_id]);
             $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -124,3 +124,5 @@ INSERT INTO `categories` (`id`, `name`)
 VALUES (7, 'Bücher & Filme');
 INSERT INTO `categories` (`id`, `name`)
 VALUES (8, 'Freizeit');
+
+ALTER TABLE `comment` ADD `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `score`;

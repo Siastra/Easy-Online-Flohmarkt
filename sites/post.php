@@ -102,14 +102,15 @@
 <?php if (isset($user) && $user->getId() != $post->getUser()->getId()):  ?>
 <input type="hidden" id="score" value="1">
 <br>
-<textarea name="comment" id="comment" cols="60" rows="3"></textarea>
+<textarea name="comment" id="comment" style="width: 100%" rows="3"></textarea>
 <br>
 <a href="#" id="js-submit" class="button btn btn-primary">Save</a>
 <?php endif;  ?>
+<div id = "comments">
 <?php foreach($comments as $comment) :?>
 <hr>
 <div class = "row">
-<div class = "col-3">
+<div class = "col-3 text-center align-middle my-auto">
 <?php $c_User = $db->getUserById($comment["author_id"]); ?>   
 <?php if (!is_null($c_User )):  ?>
 <img src="<?= $c_User->getPicture();  ?>" style="width: 50px">
@@ -143,9 +144,13 @@ noname
 <div class = "row">
 <?= $comment["comment"]; ?>
 </div>
+<div class = "row">
+<?= $comment["created_at"]; ?>
+</div>
 </div>
 </div>
     <?php endforeach;?>
+</div>
 </form>
 <script>
     lightbox.option({
@@ -180,6 +185,11 @@ noname
                 comment : comment.val(),
                 user_id : <?= $post->getUser()->getId() ?>,
                 author_id : <?= isset($user)?$user->getId(): 0 ?>
+            }, function (params) {
+                // location.reload();
+                let comment_div = $("#comments");
+                comment_div.empty();
+                comment_div.html(params);
             })
         });
         $(".js-score").on("mouseleave", function(e){

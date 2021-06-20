@@ -136,4 +136,5 @@ body {
     background-color: white;
     padding: 15px;
     border: 2px solid grey;
+    max-width: 50%;
 }
