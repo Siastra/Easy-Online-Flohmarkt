@@ -91,7 +91,7 @@
     </div>
 </section>
 <form action="" class="modal_form" style="display: none">
-<?php if (isset($user) && $user->getId() != $post->getUser()->getId()):  ?>
+<?php if (isset($user) && $user->getId() != $post->getUser()->getId() && count($db->getCommentsByThisUser($post->getUser()->getId(), $user->getId())) == 0):  ?>
 <i id="1" class="fas fa-star js-score"></i>
 <i id="2" class="far fa-star js-score"></i>
 <i id="3" class="far fa-star js-score"></i>
@@ -99,7 +99,7 @@
 <i id="5" class="far fa-star js-score"></i>
 <?php endif;  ?>
 <i id="js-mfClose" class="fas fa-times " style="position : absolute; right : 0px; top: 0px; font-size: 20px;"></i>
-<?php if (isset($user) && $user->getId() != $post->getUser()->getId()):  ?>
+<?php if (isset($user) && $user->getId() != $post->getUser()->getId()&& count($db->getCommentsByThisUser($post->getUser()->getId(), $user->getId())) == 0):  ?>
 <input type="hidden" id="score" value="1">
 <br>
 <textarea name="comment" id="comment" style="width: 100%" rows="3"></textarea>
@@ -107,6 +107,9 @@
 <a href="#" id="js-submit" class="button btn btn-primary">Save</a>
 <?php endif;  ?>
 <div id = "comments">
+<?php if(count($comments) == 0) :?>
+    <div class = "row"><div class="col-12 text-center align-middle">No comments yet</div></div>
+<?php endif;  ?>
 <?php foreach($comments as $comment) :?>
 <hr>
 <div class = "row">

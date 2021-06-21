@@ -563,4 +563,16 @@ class DB
                 throw $e;
         }
    }
+
+   public function getCommentsByThisUser($user_id, $author_id)
+   {
+        $stmt = $this->conn->prepare("SELECT * FROM `comment` WHERE user_id = ? AND author_id = ? ORDER BY created_at DESC");
+        try {
+            $stmt->execute([$user_id, $author_id]);
+            $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $comments;
+        } catch (PDOException $e) {
+                throw $e;
+        }
+   }
 }
