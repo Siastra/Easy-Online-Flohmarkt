@@ -524,6 +524,271 @@ class DB
         }
 
     }
+    
+     function getUserIdByPostId( $postId ) {
+        $sql1 = $this->conn->prepare( 'SELECT user_id FROM `adverts` WHERE id = ?' );
+        $sql1->execute( [$postId] );
+        return $sql1->fetch()['user_id'];
+    }
+
+    function fetchUser( $postId ) {
+        $userId['userId'] = $this->getUserIdByPostId( $postId );
+        return $this->fetchUserById( $userId );
+    }
+
+    function getFriendDataByPostId( $postId, $buyerId ) {
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `friend` WHERE post_id = ? AND buyer_id = ?' );
+        $sql1->execute( [$postId, $buyerId] );
+        return $sql1->fetch();
+    }
+
+    function getFriendData( $postId, $buyerId, $sellerId ) {
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `friend` WHERE post_id = ? AND buyer_id = ? AND seller_id = ?' );
+        $sql1->execute( [$postId, $buyerId, $sellerId] );
+        return $sql1->fetch();
+    }
+
+    function fetchPostIdFromFiendTable( $id ) {
+        $sql1 = $this->conn->prepare( 'SELECT post_id FROM `friend` WHERE buyer_id = ? OR seller_id = ?' );
+        $sql1->execute( [$id, $id] );
+        return $sql1->fetchAll();
+    }
+
+    function fetchAllFromFiendTable( $id ) {
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `friend` WHERE buyer_id = ? OR seller_id = ?' );
+        $sql1->execute( [$id, $id] );
+        return $sql1->fetchAll();
+    }
+
+    function fetchFriends() {
+        $allData = array();
+        $user = $this->getUser( $_SESSION['email'] );
+        $data = $this->fetchAllFromFiendTable( $user->getID() );
+
+        $length = Count( $data );
+        for ( $i = 0; $i < $length; $i++ ) {
+            $allData[$i]['postId'] = $data[$i]['post_id'];
+            $allData[$i]['fId'] = $data[$i]['id'];
+
+            if ( $user->getID() === $data[$i]['seller_id'] ) {
+                $id['userId'] = $data[$i]['buyer_id'];
+                $u = $this->fetchUserById( $id );
+            } else {
+                $id['userId'] = $data[$i]['seller_id'];
+                $u = $this->fetchUserById( $id );
+            }
+
+            $allData[$i]['headerName'] = $u[0]['fname'];
+            $allData[$i]['headerUserPic'] = $u[0]['picture'];
+
+            $pData = $this->fetchPostDataById( $data[$i]['post_id'] );
+
+            $allData[$i]['title'] = $pData['title'];
+        }
+
+        return $allData;
+        ;
+    }
+
+    function fetchPostDataById( $id ) {
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `adverts` WHERE id = ?' );
+        $sql1->execute( [$id] );
+        return $sql1->fetch();
+    }
+
+    function fetchAddsBySessionUserId() {
+
+        $sessionUserChatPost = array();
+
+        $user = $this->getUser( $_SESSION['email'] );
+        $sessionUserId = $user->getID();
+
+        $data = $this->fetchAllFromFiendTable( $user->getID() );
+        return $data;
+    }
+
+    function fetchMessage( $data ) {
+        $post_id = $data['postId'];
+
+        if ( isset( $_SESSION['email'] ) ) {
+            $user = $this->getUser( $_SESSION['email'] );
+        }
+
+        $seller_id = $this->getUserIdByPostId( $post_id );
+
+        if ( $user->getID() != $seller_id ) {
+
+            $friendData = $this->getFriendData( $post_id, $user->getID(), $seller_id );
+            $sender = 'buyer';
+        } else {
+            $friendData = $this->getFriendData( $post_id, $data['userId'], $seller_id );
+            $sender = 'seller';
+        }
+
+        $friendId = $friendData['id'];
+
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `chat` WHERE f_id = ? ' );
+        $sql1->execute( [$friendId] );
+        return $sql1->fetchAll();
+    }
+
+    function fetchChat( $data ) {
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `chat` WHERE f_id = ? ' );
+        $sql1->execute( [$data['fId']] );
+        return $sql1->fetchAll();
+    }
+
+    function insertFriend( $userId, $postId ) {
+
+        $seller_id = $this->getUserIdByPostId( $postId );
+
+        if ( $userId != $seller_id ) {
+            $friendData = $this->getFriendDataByPostId( $postId, $userId );
+        }
+
+        if ( $friendData != null ) {
+            if ( $friendData['seller_id'] === $seller_id && $friendData['buyer_id'] === $userId && $postId === $friendData['post_id'] ) {
+                return;
+            }
+        }
+
+        if ( $seller_id != $userId ) {
+
+            $stmt = $this->conn->prepare( "INSERT INTO `friend` (`buyer_id`, `seller_id`, `post_id`) 
+            VALUES (?, ?, ?);" );
+            try {
+                $stmt->execute( [$userId, $seller_id, $postId] );
+                return true;
+            } catch ( PDOException $e ) {
+                $existingkey = 'Integrity constraint violation: 1062 Duplicate entry';
+                if ( strpos( $e->getMessage(), $existingkey ) !== FALSE ) {
+                    return false;
+                } else {
+                    throw $e;
+                }
+            }
+        } else {
+            // error // personal post.
+        }
+    }
+
+    function StoreMessage( $message ) {
+
+        if ( isset( $_SESSION['email'] ) ) {
+            $user = $this->getUser( $_SESSION['email'] );
+        }
+
+        $seller_id = $this->getUserIdByPostId( $message['post_id'] );
+
+        if ( $user->getID() != $seller_id ) {
+
+            $sender = 'buyer';
+        } else {
+            $sender = 'seller';
+        }
+
+        $stmt = $this->conn->prepare( 'INSERT INTO `chat` (`f_id`,`message`, `sender`,`senderName`, `senderId`, `senderPic`) VALUES (?, ?, ?,?,?, ? );' );
+        $stmt->execute( [$message['f_id'], $message['message'], $sender, $user->getFname(), $user->getID(), $user->getPicture()] );
+    }
+
+    function InsertMessage( $message ) {
+
+        if ( $message == null ) {
+            return;
+        }
+
+        $post_id = $message['post_id'];
+
+        if ( isset( $_SESSION['email'] ) ) {
+            $user = $this->getUser( $_SESSION['email'] );
+        }
+
+        $seller_id = $this->getUserIdByPostId( $post_id );
+
+        if ( $user->getID() != $seller_id ) {
+
+            $friendData = $this->getFriendData( $post_id, $user->getID(), $seller_id );
+            $sender = 'buyer';
+        } else {
+            $friendData = $this->getFriendData( $post_id, $message['id'], $seller_id );
+            $sender = 'seller';
+        }
+
+        $friendId = $friendData['id'];
+
+        $stmt = $this->conn->prepare( 'INSERT INTO `chat` (`f_id`,`message`, `sender`,`senderName`, `senderId`, `senderPic`) VALUES (?, ?, ?,?,?,? );' );
+        $stmt->execute( [$friendId, $message['message'], $sender, $user->getFname(), $user->getID(), $user->getPicture()] );
+    }
+
+    function fetchAllBuyerByPostId( $postId ) {
+
+        if ( $postId == null ) {
+            return;
+        }
+
+        $buyer = array();
+        $sql1 = $this->conn->prepare( 'SELECT buyer_id FROM `friend` WHERE post_id = ?' );
+        $sql1->execute( [$postId] );
+
+        $result = $sql1->fetchAll();
+        $length = Count( $result );
+
+        for ( $i = 0; $i < $length; $i++ ) {
+
+            $sql1 = $this->conn->prepare( 'SELECT * FROM `users` WHERE id =  ?' );
+            $sql1->execute( [$result[$i]['buyer_id']] );
+            array_push( $buyer, $sql1->fetch() );
+        }
+
+        return $buyer;
+    }
+
+    function fetchBuyerId() {
+
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `users` WHERE email = ?' );
+        $sql1->execute( [$_SESSION['email']] );
+
+        return $sql1->fetchAll();
+    }
+
+    function fetchAllFriends() {
+
+        $user = $this->getUser( $_SESSION['email'] );
+
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `friend` WHERE seller_id = ? OR buyer_id = ?' );
+        $sql1->execute( [$user->getID(), $user->getID()] );
+
+        return $sql1->fetchAll();
+    }
+
+    function fetchUserById( $data ) {
+
+        if ( $data == null ) {
+            return;
+        }
+
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `users` WHERE id = ?' );
+        $sql1->execute( [$data['userId']] );
+
+        return $sql1->fetchAll();
+    }
+
+    function fetchBuyerByPostAndSellerId( $data ) {
+
+        if ( $data == null ) {
+            return;
+        }
+
+        $sql1 = $this->conn->prepare( 'SELECT * FROM `friend` WHERE seller_id = ? AND post_id = ?' );
+
+        $sql1->execute( [$data['seller_id'], $data['post_id']] );
+
+        return $sql1->fetch();
+    }
+
+    /*
+    Farasat Section ends.
+    */
 
     public function editAdv($id, $title, $price, $text) : bool
     {
