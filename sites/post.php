@@ -263,7 +263,7 @@
                         }
                     ?>
 
-                            <a href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/".$limage?>" data-lightbox="roadtrip">
+                            <a href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/ ".$limage?>" data-lightbox="roadtrip">
                                 <img class="col-12" alt="<?=$limage?>" src="<?=$_SESSION["relPath"]."/pictures/Adds/$id/half/".$limage?>">
                             </a>
 
@@ -271,7 +271,7 @@
                     <div class="row col-12 mt-2 ">
                         <?php if (count($images)) : ?>
                         <?php foreach($images as $image): ?>
-                        <a class="col-3 p-0" href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/".$image?>" data-lightbox="roadtrip">
+                        <a class="col-3 p-0" href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/ ".$image?>" data-lightbox="roadtrip">
                             <img class="col-12 p-1" alt="<?=$image?>" src="<?=$_SESSION["relPath"]."/pictures/Adds/$id/thumbnail/".$image?>">
                         </a>
                         <?php endforeach;?>
@@ -495,9 +495,8 @@
                                     interestedBuyer.setAttribute('class', 'personList');
                                 for (let index = 0; index < data.length; index++)
                                 {
-                                   
                                     const list = document.createElement('li');
-                                    list.setAttribute('onclick', 'openChat(' + data[index]['id'] + ')');
+                                        list.setAttribute('onclick', 'openChat(' + data[index]['id'] + ')');
                                     list.setAttribute('id', data[index]['id']);
                                    
                                     const imgTag = document.createElement('img');
@@ -522,8 +521,10 @@
                     if (isActiv) {
                         if (!isPersonal) {
                             $('.main-card-container').show('fast');
-                            CreateChat();
-                            fetchBuyerId();
+                              if(isOpen == false){
+                                 CreateChat();
+                                fetchBuyerId();
+                               }
                         } else {
                             console.log("here-list");
                             ShowInterestedPersonList();
@@ -619,7 +620,6 @@
 
                 function openChat(id) {
                     isOpen = true;
-                  
 
                     fetchUserById(id);
 
