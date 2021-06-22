@@ -255,7 +255,7 @@
     function fetchAllChatData() {
         $.ajax({
             type: "GET",
-            url: "<?=$_SESSION["relPath"]."/Backend/Api/pChatApi/test-api.php"?>",
+            url: "<?=$_SESSION["relPath"]."/backend/Api/pChatApi/test-api.php"?>",
             // url: "http://localhost/EOF_Latest_Version/Backend/Api/pChatApi/test-api.php",
             success: function(response) {
                 console.log(response);

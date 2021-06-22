@@ -13,7 +13,7 @@ if($_REQUEST["type"] == "insert"){
     if ($db->createAdv($advertisement)) {
         $advId=$db->getLatestAdvId();
         for($i=0; $i<sizeof($pic["name"]); $i++){
-            Upload::uploadPost($_FILES, $pic["name"][$i],$i, 0,$advId);
+            Upload::uploadPost($_FILES, $pic["name"][$i], $i, 0,$advId);
         }
         $db->assignCategories($advId,$_REQUEST["categories"]);
         header("Location: ../index.php?section=dashboard");

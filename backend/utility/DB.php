@@ -306,8 +306,8 @@ class DB
     {
         $result = array();
         $searchText = "%" . $searchText . "%";
-        $sql = $this->conn->prepare("SELECT * FROM `adverts` WHERE `text` LIKE  ? ");
-        $sql->execute([$searchText]);
+        $sql = $this->conn->prepare("SELECT * FROM `adverts` WHERE `text` LIKE  ? OR `title` LIKE ? ");
+        $sql->execute([$searchText,$searchText]);
         $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
         if (!empty($posts)) {
             foreach ($posts as $post) {
@@ -575,7 +575,7 @@ class DB
                 throw $e;
         }
    }
-    
+
        /*
     Farasat Section starts
     */
