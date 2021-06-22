@@ -25,7 +25,7 @@ elseif(isset($_GET["sortTerm"])){
             Sort By
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="index.php?section=dashboard&sortTerm=DateDown">Sort by Date(newest First)</a>
+            <a class="dropdown-item" href="index.php?section=dashboard&sortTerm=DateUp">Sort by Date(newest First)</a>
             <a class="dropdown-item" href="index.php?section=dashboard&sortTerm=DateDown">Sort by Date(oldest First)</a>
             <a class="dropdown-item" href="index.php?section=dashboard&sortTerm=NameUp">Sort by Name(Ascending)</a>
             <a class="dropdown-item" href="index.php?section=dashboard&sortTerm=NameDown">Sort by Name(Descending)</a>

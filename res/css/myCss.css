@@ -81,7 +81,14 @@ input:focus {
     background-color: #d0c7ff;
     text-align: center;
 }
-
+.aboutYou{
+    height:fit-content;
+    float: left;
+    width: 30%;
+}
+.aboutPics{
+    width:35%;
+}
 body {
     padding-top: 60px;
 }
