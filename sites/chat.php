@@ -246,25 +246,6 @@
     document.body.className = 'js';
 </script>
 
-<?php
-
-
-  function getImgPath($addId){
-      $img;
-   
-      $images = scandir($_SESSION["path"]."/pictures/Adds/$addId/Half/");
-    $images = array_filter($images, function($el){
-        if($el !== '.' && $el !== '..'){
-            return $el;
-        }
-    });
-  }
-
-  $img = getImgPath(1);
-
-echo $img;
-?>
-
 <script>
     fetchAllChatData();
     let isNewMessageInserted = true;
