@@ -246,16 +246,32 @@
     document.body.className = 'js';
 </script>
 
+
 <script>
     fetchAllChatData();
     let isNewMessageInserted = true;
     let friendId = 0;
 
+    function isFileExist(urlToFile) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('HEAD', urlToFile, false);
+    xhr.send();
+     
+    if (xhr.status == "404"){
+        return false;
+
+    }
+    else{
+
+    return true;
+    }
+}
+
     // new
     function fetchAllChatData() {
         $.ajax({
             type: "GET",
-            url: "<?=$_SESSION["relPath"]."/backend/Api/pChatApi/test-api.php"?>",
+            url: "<?=$_SESSION["relPath"]."/Backend/Api/pChatApi/test-api.php"?>",
             // url: "http://localhost/EOF_Latest_Version/Backend/Api/pChatApi/test-api.php",
             success: function(response) {
                 console.log(response);
@@ -380,7 +396,7 @@
         console.log(messages);
         const messageContainer = document.getElementById('pMessage');
         messageContainer.innerHTML = "";
-
+let counter = 1
         $.ajax({
             type: "GET",
             url: "<?=$_SESSION["relPath"]."/Backend/Api/pChatApi/api-test.php"?>",
@@ -395,7 +411,7 @@
 
                     const imgTag = document.createElement('img');
                     imgTag.setAttribute('class', 'card-img-top');
-                    imgTag.setAttribute('src',messages[index]['senderPic']);
+                    imgTag.setAttribute('src', messages[index]['senderPic']);
 
                     const messageCardBody = document.createElement('div');
                     messageCardBody.setAttribute('class', 'card-body');
@@ -436,6 +452,8 @@
         });
     }
 
+   
+
     // new
     function CreateNewList(data) {
         let chatData = new Array();
@@ -455,7 +473,13 @@
             const pTag = document.createElement('p');
             pTag.innerText = data[index]['title'];
             const imgTag = document.createElement('img');
-            imgTag.setAttribute('src', "pictures/Adds/" + data[index]['postId'] + "/full/0.png");
+
+             if(isFileExist('pictures/Adds/' + data[index]["postId"] + '/full/0.png')){
+                 imgTag.setAttribute('src', "pictures/Adds/" + data[index]['postId'] + "/full/0.png");
+             }
+             else{
+            imgTag.setAttribute('src', "pictures/Adds/" + data[index]['postId'] + "/full/0.jpg");
+           }
             friend.appendChild(pTag);
             friend.appendChild(imgTag);
             const hiddenBox = document.createElement('input');
