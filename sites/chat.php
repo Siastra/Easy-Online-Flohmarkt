@@ -278,7 +278,7 @@
                 CreateNewList(response);
             },
             error: function(e) {
-                alert("error1");
+               // alert("error1");
             }
         });
     }
@@ -337,7 +337,7 @@
                fetchChatMessage(jsonObj);
             },
             error: function(e) {
-                alert("error2");
+             //   alert("error2");
             }
         });
     }
@@ -381,7 +381,7 @@
                     show(response);
             },
             error: function(e) {
-                alert("error3");
+             //   alert("error3");
             }
         });
     }
@@ -447,7 +447,7 @@ let counter = 1
                 }
             },
             error: function(e) {
-                alert("error");
+             //   alert("error");
             }
         });
     }
