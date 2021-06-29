@@ -85,11 +85,21 @@ class DB
     }
 
     //Updates profile picture in the DB.
-    public function updateProfilePic(int $id, string $path): bool
-    {
-        $stmt = $this->conn->prepare("UPDATE `users` SET picture=?
-                                                WHERE id=?");
-        if (!$stmt->execute([$path, $id])) {
+     public function updateProfilePic( int $id, string $path ): bool {
+        $stmt = $this->conn->prepare( "UPDATE `users` SET picture=?
+                                                WHERE id=?" );
+        if ( !$stmt->execute( [$path, $id] ) ) {
+            return false;
+        } else {
+            $this->updateProfilePicPathInChatTable( $id, $path );
+            return true;
+        }
+    }
+
+    public function updateProfilePicPathInChatTable( int $id, string $path ): bool {
+        $stmt = $this->conn->prepare( "UPDATE `chat` SET senderPic=?
+                                                WHERE senderId=?" );
+        if ( !$stmt->execute( [$path, $id] ) ) {
             return false;
         } else {
             return true;
