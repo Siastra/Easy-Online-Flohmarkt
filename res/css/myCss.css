@@ -163,3 +163,19 @@ body {
     min-width: 300px;
     width: 50%;
 }
+
+@media (max-width: 800px){
+.modal_form {
+    position: absolute;
+    top: 160px;
+    left: 10px;
+    margin-left: 0%;
+    background-color: white;
+    padding: 15px;
+    border: 2px solid grey;
+    max-width: 90%;
+    min-width: 255px;
+    width: 90%;
+    overflow-x: hidden;
+}
+}

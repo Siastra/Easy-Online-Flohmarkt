@@ -116,7 +116,7 @@ class DB
                 return null;
             } else {
                 $user = new User($row["id"], $row["title"], $row["fname"], $row["lname"],
-                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"], $row["picture"]);
+                    $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"], $row["picture"], $row["admin"], $row["created_at"]);
                 $favorites = [];
                 $favorites = $this->getFavoritesByUser($row["id"]);
                 $user->setFavorites($favorites);
@@ -196,7 +196,7 @@ class DB
                 if ($stmt->execute([$id])) {
                     $row_score = $stmt->fetch(PDO::FETCH_ASSOC);
                     $user = new User($row["id"], $row["title"], $row["fname"], $row["lname"],
-                        $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"]);
+                        $row["address"], $row["plz"], $row["city"], $row["email"], $row["password"],$row["picture"], $row["admin"], $row["created_at"] );
                     if ($row_score)
                         $user->setScore($row_score["score"]);
                     return $user;

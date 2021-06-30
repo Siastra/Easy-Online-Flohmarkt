@@ -11,7 +11,7 @@ class User
     private $score;
 
     public function __construct($id, $title, $fname, $lname, $address, $plz, $city, $email, $password,
-                                $picture = "res/images/user.svg", $admin = 0)
+                                $picture = "res/images/user.svg", $admin = 0, $created_at)
     {
         $this->email = $email;
         $this->fname = $fname;
@@ -24,6 +24,7 @@ class User
         $this->id = $id;
         $this->password = $password;
         $this->picture = $picture;
+        $this->created_at = $created_at;
     }
 
 
@@ -226,5 +227,15 @@ class User
     public function setScore($score)
     {
         $this->score = $score;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
     }
 }

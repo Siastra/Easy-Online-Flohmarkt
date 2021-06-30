@@ -256,7 +256,7 @@
         <hr>
         <div class="container">
             <div class="row">
-                <div class="col-8 image mr-auto">
+                <div class="col-md-8 image mr-auto">
                     <div class="row mx-auto">
                         <?php
                         if (count($images)) {
@@ -266,7 +266,7 @@
                         }
                     ?>
 
-                            <a href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/ ".$limage?>" data-lightbox="roadtrip">
+                            <a href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/".$limage?>" data-lightbox="roadtrip">
                                 <img class="col-12" alt="<?=$limage?>" src="<?=$_SESSION["relPath"]."/pictures/Adds/$id/half/".$limage?>">
                             </a>
 
@@ -274,14 +274,14 @@
                     <div class="row col-12 mt-2 ">
                         <?php if (count($images)) : ?>
                         <?php foreach($images as $image): ?>
-                        <a class="col-3 p-0" href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/ ".$image?>" data-lightbox="roadtrip">
+                        <a class="col-3 p-0" href="<?=$_SESSION["relPath"]."/pictures/Adds/$id/full/".$image?>" data-lightbox="roadtrip">
                             <img class="col-12 p-1" alt="<?=$image?>" src="<?=$_SESSION["relPath"]."/pictures/Adds/$id/thumbnail/".$image?>">
                         </a>
                         <?php endforeach;?>
                         <?php endif; ?>
                     </div>
                 </div>
-                <div class="col-4 price px-0">
+                <div class="col-md-4 price px-0">
                     <div class="row">
                         <div class="col-12 text-center" style="font-size: larger; font-weight: 600; background-color: yellow; padding: 15px; margin-top: 20px;">
                             <?= $post->getPrice()?>€ </div>
@@ -292,8 +292,21 @@
                     <div class="row">
                         <div class="container">
                             <div class="row">
+                            <div class="col-3">
+                        <?php if (!is_null($post->getUser()->getPicture())):  ?>
+                        <img src="<?= $post->getUser()->getPicture();  ?>" style="width: 50px">
+                        <?php else:  ?>
+                        <img src="/res/images/user.svg" style="width: 50px">
+                        <?php endif;  ?>
+                        </div>
+                        <div class="col-9">
+                            <div class="row">
                                 <?= $post->getUser()->getFname() ?>
                                     <?= $post->getUser()->getLname() ?>
+                            </div>
+                            <div class="row">
+                             Registered since 
+                                <?= date_format(date_create_from_format('Y-m-d H:i:s', $post->getUser()->getCreatedAt()), "m/Y")?>
                             </div>
                             <div class="row">
                                 <?= $post->getUser()->getAddress() ?>
@@ -315,6 +328,8 @@
                                     <?php endfor; ?>
                                 </div>
                             <a href="#" id="js-showcomments">See comments</a>
+                </div>
+                </div>
                 </div>
                         </div>
                     </div>
