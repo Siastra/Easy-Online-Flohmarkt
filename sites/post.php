@@ -511,7 +511,7 @@ noname
                             }
                         },
                         error: function(e) {
-                            alert("new error");
+                          //  alert("new error");
                         }
                     });
                 }
@@ -658,7 +658,7 @@ noname
                             sessionUserId = message[0]['id'];
                         },
                         error: function() {
-                         alert("fetch username by id error");
+                       //  alert("fetch username by id error");
                         }
                     });
                 }
@@ -683,7 +683,7 @@ noname
                             sPic = message[0]['picture'];
                         },
                         error: function() {
-                             alert("fetch user by id error");
+                          //   alert("fetch user by id error");
                         }
                     });
                 }
@@ -799,7 +799,7 @@ noname
                             console.log(response);
                         },
                         error: function() {
-                         alert("error");
+                       //  alert("error");
                         }
                     });
                 }
