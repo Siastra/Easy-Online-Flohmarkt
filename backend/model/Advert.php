@@ -115,6 +115,9 @@ class Advert
         if (file_exists($_SESSION["path"] ."/pictures/Adds/".$this->id."/thumbnail/0.jpg")) {
             return $_SESSION["relPath"] ."/pictures/Adds/".$this->id."/thumbnail/0.jpg";
         }
+        if (file_exists($_SESSION["path"] ."/pictures/Adds/".$this->id."/thumbnail/0.jpeg")) {
+            return $_SESSION["relPath"] ."/pictures/Adds/".$this->id."/thumbnail/0.jpeg";
+        }
         if (file_exists($_SESSION["path"] ."/pictures/Adds/".$this->id."/thumbnail/0.png")) {
             return $_SESSION["relPath"] ."/pictures/Adds/".$this->id."/thumbnail/0.png";
         }

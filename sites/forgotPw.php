@@ -18,7 +18,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input type="text" class="form-control" placeholder="Username" name="username" required>
+                            <input type="text" class="form-control" placeholder="E-Mail" name="username" required>
                         </div>
                         <div class="form-group">
                             <input type="submit" value="Reset password" class="btn float-right forgot_btn" required>

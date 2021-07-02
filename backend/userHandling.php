@@ -66,7 +66,7 @@ if ($_REQUEST["type"] == "insert") {
 } else if ($_REQUEST["type"] == "update") {
     $user = new User($_REQUEST["id"], $_REQUEST["title"], $_REQUEST["fname"],
         $_REQUEST["lname"], $_REQUEST["address"], $_REQUEST["plz"], $_REQUEST["city"], $_REQUEST["email"], '');
-    if (!empty($_FILES)) {
+    if (!empty($_FILES["picture"]["size"])) {
         $path = Upload::uploadProfilePicture($_FILES, $_REQUEST["id"]);
         if (strlen($path) > 1) {
             $db->updateProfilePic($_REQUEST["id"], $path);

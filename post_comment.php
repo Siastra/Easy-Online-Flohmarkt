@@ -26,8 +26,7 @@
 <div class = "col-8">
 <div class = "row">
 <?php if (!is_null($c_User )):  ?>
-<?= $c_User->getFname();  ?>
-<?= $c_User->getLname();  ?>
+<?= $c_User->getFname() . " \t" . $c_User->getLname();  ?>
 <?php else:  ?>
 noname
 <?php endif;  ?>
